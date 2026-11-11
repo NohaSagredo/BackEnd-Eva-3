@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Contratistas — BuildCorp{% endblock %}
+
+{% block content %}
+<div class="page-header-bar">
+    <div class="page-title-group">
+        <h1 class="page-heading">Empresas Contratistas</h1>
+        <p class="page-caption">Lista de contratistas, datos de contacto y estado de habilitación para pedir herramientas.</p>
+    </div>
+    <div>
+        <a href="{% url 'contratistas_crear' %}" class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Nuevo Contratista
+        </a>
+    </div>
+</div>
+
+<div class="card-panel" style="margin-bottom: 24px;">
+    <div class="card-body-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="min-width: 240px;">Contratista</th>
+                    <th>Representante y Contacto</th>
+                    <th>Estado</th>
+                    <th>Motivo de Bloqueo</th>
+                    <th style="width: 230px; text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in contratistas %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 14px;">{{ c.razon_social }}</div>
+                        <div class="mono" style="font-weight: 600; color: var(--color-primary); font-size: 12px; margin-top: 2px;">{{ c.rut }}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500; font-size: 13.5px;">{{ c.representante_legal }}</div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                            {{ c.email }} &bull; <span class="mono">{{ c.telefono }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        {% if c.estado == 'HABILITADO' %}
+                            <span class="status-pill success"><span class="status-dot"></span>Al día</span>
+                        {% elif c.estado == 'BLOQUEADO_MOROSIDAD' %}
+                            <span class="status-pill danger"><span class="status-dot"></span>Bloqueado por atraso</span>
+                        {% else %}
+                            <span class="status-pill neutral"><span class="status-dot"></span>Suspendido</span>
+                        {% endif %}
+                    </td>
+                    <td style="max-width: 260px; font-size: 12.5px;">
+                        {% if c.motivo_bloqueo %}
+                            <div style="font-weight: 600; color: var(--color-danger);">{{ c.motivo_bloqueo }}</div>
+                            {% if c.fecha_bloqueo %}
+                                <div class="mono" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Bloqueado el: {{ c.fecha_bloqueo|date:"d/m/Y H:i" }}</div>
+                            {% endif %}
+                        {% else %}
+                            <span style="color: var(--text-muted);">Sin atrasos pendientes</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end;">
+                            <a href="{% url 'contratistas_editar' c.id %}" class="btn btn-secondary btn-sm" title="Editar Contratista">
+                                Editar
+                            </a>
+                            
+                            <form method="POST" action="{% url 'contratistas' %}" style="display: inline-block; margin: 0;">
+                                {% csrf_token %}
+                                <input type="hidden" name="contratista_id" value="{{ c.id }}">
+                                {% if c.estado == 'HABILITADO' %}
+                                    <input type="hidden" name="accion" value="bloquear">
+                                    <input type="hidden" name="motivo" value="Bloqueo manual administrativo.">
+                                    <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--color-warning);" onclick="return confirm('¿Seguro que deseas bloquear a {{ c.razon_social }}?')" title="Bloquear Contratista">
+                                        Bloquear
+                                    </button>
+                                {% else %}
+                                    <input type="hidden" name="accion" value="desbloquear">
+                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Levantar el bloqueo a {{ c.razon_social }}?')" title="Habilitar Contratista">
+                                        Habilitar
+                                    </button>
+                                {% endif %}
+                            </form>
+
+                            <form method="POST" action="{% url 'contratistas_eliminar' c.id %}" style="display: inline-block; margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar el contratista {{ c.razon_social }}?')" title="Eliminar Contratista">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px;">No hay contratistas registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

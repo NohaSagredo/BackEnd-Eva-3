@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Historial de Actividades — BuildCorp{% endblock %}
+
+{% block content %}
+<div class="page-header-bar">
+    <div class="page-title-group">
+        <h1 class="page-heading">Historial de Actividades</h1>
+        <p class="page-caption">Registro de todas las acciones realizadas en el sistema (quién, qué y cuándo) conforme a normas ISO 27001 / ISO 9001.</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+        <a href="{% url 'exportar_auditoria_csv' %}" class="btn btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Descargar Excel
+        </a>
+    </div>
+</div>
+
+<div class="filter-toolbar">
+    <div class="filter-group">
+        <a href="{% url 'auditoria' %}" class="filter-pill {% if not modulo_filtro %}active{% endif %}">Todas ({{ total }})</a>
+        <a href="{% url 'auditoria' %}?modulo=PRESTAMOS" class="filter-pill {% if modulo_filtro == 'PRESTAMOS' %}active{% endif %}">Préstamos</a>
+        <a href="{% url 'auditoria' %}?modulo=HERRAMIENTAS" class="filter-pill {% if modulo_filtro == 'HERRAMIENTAS' %}active{% endif %}">HERRAMIENTAS</a>
+        <a href="{% url 'auditoria' %}?modulo=CONTRATISTAS" class="filter-pill {% if modulo_filtro == 'CONTRATISTAS' %}active{% endif %}">Contratistas</a>
+        <a href="{% url 'auditoria' %}?modulo=MANTENIMIENTO" class="filter-pill {% if modulo_filtro == 'MANTENIMIENTO' %}active{% endif %}">Mantenimiento</a>
+        <a href="{% url 'auditoria' %}?modulo=SEGURIDAD" class="filter-pill {% if modulo_filtro == 'SEGURIDAD' %}active{% endif %}">Seguridad</a>
+    </div>
+
+    <form method="GET" action="{% url 'auditoria' %}" style="display: flex; gap: 6px; align-items: center;">
+        {% if modulo_filtro %}<input type="hidden" name="modulo" value="{{ modulo_filtro }}">{% endif %}
+        <input type="text" name="q" value="{{ query }}" placeholder="Buscar por usuario, código o detalle..." class="form-control" style="width: 260px;">
+        <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+        {% if query %}
+            <a href="{% url 'auditoria' %}{% if modulo_filtro %}?modulo={{ modulo_filtro }}{% endif %}" class="btn btn-secondary btn-sm">Limpiar</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card-panel" style="margin-bottom: 20px;">
+    <div class="card-body-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 160px;">Fecha y Hora</th>
+                    <th>Usuario</th>
+                    <th>Acción y Sección</th>
+                    <th>Elemento</th>
+                    <th>Detalle de lo que se hizo</th>
+                    <th style="width: 170px;">Código SHA-256</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in registros %}
+                <tr>
+                    <td class="mono" style="font-size: 12.5px;">
+                        <strong style="color: var(--text-primary);">{{ log.fecha_hora|date:"d/m/Y" }}</strong><br>
+                        <span style="color: var(--text-muted); font-size: 11.5px;">{{ log.fecha_hora|date:"H:i:s" }}</span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600; font-size: 13.5px;">{{ log.usuario_nombre }}</div>
+                        <div class="mono" style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;">IP: {{ log.ip_origen|default:"127.0.0.1" }}</div>
+                    </td>
+                    <td>
+                        <div>
+                            {% if 'CREACION' in log.accion or 'DESPACHO' in log.accion or 'CIERRE' in log.accion %}
+                                <span class="status-pill success"><span class="status-dot"></span>{{ log.get_accion_display }}</span>
+                            {% elif 'BLOQUEO' in log.accion or 'ELIMINACION' in log.accion %}
+                                <span class="status-pill danger"><span class="status-dot"></span>{{ log.get_accion_display }}</span>
+                            {% else %}
+                                <span class="status-pill info"><span class="status-dot"></span>{{ log.get_accion_display }}</span>
+                            {% endif %}
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">{{ log.get_modulo_display }}</div>
+                    </td>
+                    <td class="mono" style="font-weight: 700; color: var(--color-primary); font-size: 13px;">{{ log.identificador_objeto }}</td>
+                    <td style="max-width: 380px; font-size: 13px; line-height: 1.4; color: var(--text-secondary);">
+                        {{ log.descripcion_detalle }}
+                    </td>
+                    <td class="mono" style="font-size: 11.5px; color: var(--text-secondary);" title="{{ log.hash_integridad }}">
+                        {{ log.hash_integridad|slice:":16" }}...
+                        <span class="status-pill success" style="font-size: 10px; padding: 1px 6px; display: inline-block; margin-top: 3px;">Verificado</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 40px;">No se encontraron registros de actividades.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 12px 18px; font-size: 12.5px; line-height: 1.5; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+    <div>
+        <strong style="color: var(--text-primary);">Cumplimiento Normas ISO 27001 / ISO 9001:</strong>
+        Cada acción queda registrada con un código seguro SHA-256 para asegurar que nadie pueda alterar o borrar lo ocurrido.
+    </div>
+    <span class="status-pill success" style="font-size: 11.5px;"><span class="status-dot"></span>Conforme a Norma</span>
+</div>
+{% endblock %}

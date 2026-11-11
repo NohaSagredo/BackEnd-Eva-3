@@ -1,0 +1,39 @@
+EVALUACIÓN PARCIAL N°3: DESARROLLO BACKEND (30%)
+Estudiante: Rodrigo Nicolás Peña Sagredo
+Docente: Marcelo Alvarado Aravena
+Institución: INACAP
+Proyecto Asignado: Proyecto 4 - BuildCorp: Sistema de Alquiler y Control de Herramientas
+
+==============================================================================
+1. ENLACE AL REPOSITORIO DE GITHUB
+==============================================================================
+https://github.com/NohaSagredo/BackEnd-Eva-3
+
+(El repositorio incluye el código fuente completo, README.md con instrucciones
+y el archivo prompts_ia.md con el registro de asistencia de IA).
+
+==============================================================================
+2. ENLACE A LA APLICACIÓN DESPLEGADA EN VIVO (AWS EC2)
+==============================================================================
+http://13.222.134.210/
+
+- Documentación Interactiva Swagger API:
+  http://13.222.134.210/api/docs/
+
+- Panel de Administración Django Admin:
+  http://13.222.134.210/admin/
+
+==============================================================================
+3. CUENTAS DE ACCESO PARA REVISIÓN (USUARIOS DE PRUEBA)
+==============================================================================
+• Administrador:
+  Usuario: admin
+  Contraseña: admin123
+
+• Bodega Central:
+  Usuario: bodega_central
+  Contraseña: bodega123
+
+• Supervisor de Obra:
+  Usuario: supervisor_obra
+  Contraseña: super123

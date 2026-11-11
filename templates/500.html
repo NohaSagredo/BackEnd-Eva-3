@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 — Error Interno del Servidor | BuildCorp</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .error-card {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 40px 32px;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+        }
+        .code {
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            color: #dc2626;
+            margin-bottom: 8px;
+        }
+        h1 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        p {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        .btn {
+            display: inline-flex;
+            background: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: background 0.15s ease;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="code">500</div>
+        <h1>Error inesperado del sistema</h1>
+        <p>
+            Ocurrió un problema inesperado al cargar la información. El incidente fue guardado en el historial para ser revisado por el equipo técnico.
+        </p>
+        <a href="/" class="btn">Volver al inicio</a>
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-family: monospace; font-size: 11px; color: #94a3b8;">
+            BUILDCORP &bull; ERROR 500
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acta de Despacho — {{ prestamo.codigo_prestamo }} | BuildCorp</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #ffffff;
+            color: #000000;
+            padding: 32px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .header-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        .company-title {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+        .doc-title {
+            text-align: right;
+        }
+        .doc-folio {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .grid-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border: 1px solid #000000;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        .info-col div {
+            margin-bottom: 6px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 11px;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f5;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .legal-clause {
+            font-size: 10px;
+            color: #52525b;
+            text-align: justify;
+            border: 1px solid #e4e4e7;
+            padding: 10px;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+        .signature-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+            page-break-inside: avoid;
+        }
+        .signature-slot {
+            border: 1px solid #000000;
+            padding: 16px;
+            text-align: center;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .signature-img {
+            max-height: 90px;
+            max-width: 100%;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+        .no-print {
+            background: #000000;
+            color: #ffffff;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .btn-print {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #ffffff;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <div>
+            <strong>VISTA PREVIA DE ACTA DE ENTREGA / GUÍA DE DESPACHO</strong> &bull; Folio {{ prestamo.codigo_prestamo }}
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-print" onclick="window.print()">IMPRIMIR ACTA (CTRL + P)</button>
+            <button class="btn-print" onclick="window.close()" style="background: transparent; color: #fff; border-color: #fff;">CERRAR</button>
+        </div>
+    </div>
+
+    <div class="header-box">
+        <div>
+            <div class="company-title">BUILDCORP CHILE SPA</div>
+            <div style="font-size: 11px; color: #52525b; margin-top: 2px;">
+                RUT: 76.890.123-4 &bull; DEPARTAMENTO DE LOGÍSTICA Y MAQUINARIA DE OBRA<br>
+                CASA MATRIZ: AV. ALEMANIA 0850, TEMUCO &bull; TEL: +56 45 220 9000
+            </div>
+        </div>
+        <div class="doc-title">
+            <div style="font-size: 12px; font-weight: 800; text-transform: uppercase;">GUÍA DE DESPACHO INTERNA</div>
+            <div class="doc-folio">{{ prestamo.codigo_prestamo }}</div>
+            <div style="font-size: 11px; color: #52525b;">EMISIÓN: {{ prestamo.fecha_prestamo|date:"d/m/Y H:i" }}</div>
+        </div>
+    </div>
+
+    <div class="grid-info">
+        <div class="info-col">
+            <div><strong>DESTINO:</strong> {{ prestamo.obra.nombre }} ({{ prestamo.obra.codigo }})</div>
+            <div><strong>DIRECCIÓN OBRA:</strong> {{ prestamo.obra.direccion }}</div>
+            <div><strong>SUPERVISOR A CARGO:</strong> {{ prestamo.obra.supervisor_nombre }} ({{ prestamo.obra.supervisor_telefono }})</div>
+            <div><strong>DESPACHADOR BODEGA:</strong> {{ prestamo.responsable_despacho.username }}</div>
+        </div>
+        <div class="info-col">
+            <div><strong>EMPRESA SUBCONTRATISTA:</strong> {{ prestamo.contratista.razon_social }}</div>
+            <div><strong>RUT CONTRATISTA:</strong> {{ prestamo.contratista.rut }}</div>
+            <div><strong>RECEPTOR AUTORIZADO:</strong> {{ prestamo.receptor_nombre }} (RUT: {{ prestamo.receptor_rut }})</div>
+            <div><strong>FECHA COMPROMISO DEVOLUCIÓN:</strong> <strong style="text-decoration: underline;">{{ prestamo.fecha_pactada_devolucion|date:"d/m/Y" }}</strong></div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 120px;">CÓDIGO SKU</th>
+                <th>DESCRIPCIÓN DEL ACTIVO / EQUIPO</th>
+                <th>CATEGORÍA</th>
+                <th>MARCA / MODELO</th>
+                <th style="width: 120px;">N° DE SERIE</th>
+                <th style="width: 90px; text-align: right;">HORÓMETRO</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in prestamo.items.all %}
+            <tr>
+                <td style="font-family: monospace; font-weight: 700;">{{ item.herramienta.codigo_inventario }}</td>
+                <td><strong>{{ item.herramienta.nombre }}</strong></td>
+                <td>{{ item.herramienta.categoria.nombre }}</td>
+                <td>{{ item.herramienta.marca }} {{ item.herramienta.modelo }}</td>
+                <td style="font-family: monospace;">{{ item.herramienta.numero_serie|default:"N/A" }}</td>
+                <td style="text-align: right; font-family: monospace;">{{ item.horas_uso_iniciales }} hrs</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="legal-clause">
+        <strong>DECLARACIÓN DE RESPONSABILIDAD Y CONDICIONES DE ALQUILER:</strong><br>
+        El receptor declara recibir las herramientas y maquinarias individualizadas en perfecto estado mecánico, eléctrico y de limpieza, comprometiéndose a su uso exclusivo en la obra señalada y por personal debidamente calificado. Toda herramienta no devuelta en la fecha pactada incurrirá en el <strong>bloqueo preventivo automático del contratista</strong> para futuros despachos en todas las obras de BuildCorp, facultando además al cobro de penalizaciones diarias y reposición a valor de mercado en caso de extravío o daño irreparable.
+    </div>
+
+    <div class="signature-box">
+        <div class="signature-slot">
+            <div style="font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">ENTREGADO CONFORME (BODEGA CENTRAL)</div>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #71717a;">
+                FIRMA REGISTRADA EN SISTEMA POR:<br>
+                <strong>{{ prestamo.responsable_despacho.username }}</strong>
+            </div>
+            <div style="border-top: 1px solid #000; padding-top: 6px; font-size: 10px;">
+                DESPACHADOR BODEGA BUILDCORP
+            </div>
+        </div>
+
+        <div class="signature-slot">
+            <div style="font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">RECIBIDO CONFORME (FIRMA DIGITAL RECEPTOR)</div>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                {% if prestamo.firma_digital_entrega %}
+                    <img src="{{ prestamo.firma_digital_entrega }}" class="signature-img" alt="Firma Digital">
+                {% else %}
+                    <span style="color: #71717a;">FIRMA PENDIENTE</span>
+                {% endif %}
+            </div>
+            <div style="border-top: 1px solid #000; padding-top: 6px; font-size: 10px;">
+                <strong>{{ prestamo.receptor_nombre }}</strong> &bull; RUT: {{ prestamo.receptor_rut }}<br>
+                RESPONSABLE EN OBRA / CONTRATISTA
+            </div>
+        </div>
+    </div>
+</body>
+</html>

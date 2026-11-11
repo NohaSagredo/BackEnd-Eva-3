@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}400 — Datos incorrectos | BuildCorp{% endblock %}
+
+{% block content %}
+<div style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0;">
+    <div class="card-panel" style="max-width: 600px; width: 100%; padding: 36px 32px; text-align: center; box-shadow: var(--shadow-lg);">
+        <div class="mono" style="font-size: 64px; font-weight: 900; line-height: 1; letter-spacing: -0.05em; color: var(--color-warning); margin-bottom: 8px;">
+            400
+        </div>
+        <h1 style="font-size: 18px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 8px;">
+            Datos enviados incorrectos
+        </h1>
+        <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px;">
+            La información enviada en el formulario tiene errores o faltan datos obligatorios. Revisa e inténtalo nuevamente.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 8px;">
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                Volver al Inicio
+            </a>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-size: 11px; color: var(--text-muted);" class="mono">
+            BUILDCORP &bull; ERROR 400
+        </div>
+    </div>
+</div>
+{% endblock %}

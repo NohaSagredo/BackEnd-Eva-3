@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+
+{% block title %}BuildCorp Admin | {{ title }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #ffffff;">
+        <span style="font-weight: 900; letter-spacing: -0.02em; font-size: 16px;">BUILDCORP ENTERPRISE</span>
+        <span style="font-size: 11px; background: #27272a; padding: 2px 8px; border-radius: 2px; color: #a1a1aa; font-weight: 600;">
+            EVALUACIÓN 3 &bull; RODRIGO PEÑA SAGREDO
+        </span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div style="float: right; padding: 10px 20px; font-size: 12px;">
+    <a href="/" target="_blank" style="color: #ffffff; text-decoration: underline; font-weight: 700;">
+        IR A LA PLATAFORMA WEB &rarr;
+    </a>
+</div>
+{% endblock %}

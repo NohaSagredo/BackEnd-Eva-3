@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if editando %}Editar Contratista: {{ contratista.razon_social }}{% else %}Nuevo Contratista{% endif %} — BuildCorp{% endblock %}
+
+{% block content %}
+<div style="max-width: 820px; margin: 0 auto; width: 100%;">
+    <div class="page-header-bar" style="margin-bottom: 18px;">
+        <div class="page-title-group">
+            <h1 class="page-heading">{% if editando %}Editar Contratista: {{ contratista.razon_social }}{% else %}Agregar Nuevo Contratista{% endif %}</h1>
+            <p class="page-caption">Registra los datos de la empresa contratista y su estado para solicitar herramientas.</p>
+        </div>
+        <a href="{% url 'contratistas' %}" class="btn btn-secondary">&larr; Volver a Contratistas</a>
+    </div>
+
+    <form method="POST" class="form-card" style="margin-bottom: 32px;">
+        {% csrf_token %}
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label" for="rut">RUT de la empresa *</label>
+                <input type="text" name="rut" id="rut" class="form-control mono" value="{{ contratista.rut|default:'' }}" placeholder="Ej: 76.543.210-K" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="estado">Estado *</label>
+                <select name="estado" id="estado" class="form-control">
+                    <option value="HABILITADO" {% if contratista.estado == 'HABILITADO' %}selected{% endif %}>Al día (Habilitado)</option>
+                    <option value="BLOQUEADO_MOROSIDAD" {% if contratista.estado == 'BLOQUEADO_MOROSIDAD' %}selected{% endif %}>Bloqueado por atraso</option>
+                    <option value="SUSPENDIDO" {% if contratista.estado == 'SUSPENDIDO' %}selected{% endif %}>Suspendido temporalmente</option>
+                </select>
+            </div>
+
+            <div class="form-group full">
+                <label class="form-label" for="razon_social">Nombre o Razón Social de la empresa *</label>
+                <input type="text" name="razon_social" id="razon_social" class="form-control" value="{{ contratista.razon_social|default:'' }}" placeholder="Ej: Constructora y Montajes del Biobío SpA" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="representante_legal">Nombre del representante legal *</label>
+                <input type="text" name="representante_legal" id="representante_legal" class="form-control" value="{{ contratista.representante_legal|default:'' }}" placeholder="Ej: Fernando Tapia Vera" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="telefono">Teléfono de contacto *</label>
+                <input type="text" name="telefono" id="telefono" class="form-control mono" value="{{ contratista.telefono|default:'' }}" placeholder="+56 9 8765 4321" required>
+            </div>
+
+            <div class="form-group full">
+                <label class="form-label" for="email">Correo electrónico *</label>
+                <input type="email" name="email" id="email" class="form-control" value="{{ contratista.email|default:'' }}" placeholder="contacto@empresa.cl" required>
+            </div>
+
+            <div class="form-group full">
+                <label class="form-label" for="motivo_bloqueo">Motivo de bloqueo o notas (opcional)</label>
+                <textarea name="motivo_bloqueo" id="motivo_bloqueo" class="form-control" rows="3" placeholder="Si se bloquea, escribe aquí la razón...">{{ contratista.motivo_bloqueo|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
+            <a href="{% url 'contratistas' %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">
+                {% if editando %}Guardar Cambios{% else %}Guardar Contratista{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

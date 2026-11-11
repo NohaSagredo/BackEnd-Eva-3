@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if editando %}Editar Obra: {{ obra.codigo }}{% else %}Nueva Obra{% endif %} — BuildCorp{% endblock %}
+
+{% block content %}
+<div style="max-width: 820px; margin: 0 auto; width: 100%;">
+    <div class="page-header-bar" style="margin-bottom: 18px;">
+        <div class="page-title-group">
+            <h1 class="page-heading">{% if editando %}Editar Obra: {{ obra.codigo }}{% else %}Agregar Nueva Obra{% endif %}</h1>
+            <p class="page-caption">Registra los datos de la obra para poder asignarle herramientas y préstamos.</p>
+        </div>
+        <a href="{% url 'obras' %}" class="btn btn-secondary">&larr; Volver a Obras</a>
+    </div>
+
+    <form method="POST" class="form-card" style="margin-bottom: 32px;">
+        {% csrf_token %}
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label" for="codigo">Código de la obra *</label>
+                <input type="text" name="codigo" id="codigo" class="form-control mono" value="{{ obra.codigo|default:'' }}" placeholder="Ej: OBRA-PUC-04" required {% if editando %}readonly style="background: var(--bg-subtle);"{% endif %}>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="activa">Estado de la obra</label>
+                <select name="activa" id="activa" class="form-control">
+                    <option value="True" {% if obra.activa or not editando %}selected{% endif %}>Obra activa</option>
+                    <option value="False" {% if editando and not obra.activa %}selected{% endif %}>Obra terminada</option>
+                </select>
+            </div>
+
+            <div class="form-group full">
+                <label class="form-label" for="nombre">Nombre de la obra *</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ obra.nombre|default:'' }}" placeholder="Ej: Condominio Altos del Bosque - Etapa 2" required>
+            </div>
+
+            <div class="form-group full">
+                <label class="form-label" for="direccion">Dirección *</label>
+                <input type="text" name="direccion" id="direccion" class="form-control" value="{{ obra.direccion|default:'' }}" placeholder="Ej: Camino a Huichahue Km 4, Padre Las Casas" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="supervisor_nombre">Supervisor a cargo *</label>
+                <input type="text" name="supervisor_nombre" id="supervisor_nombre" class="form-control" value="{{ obra.supervisor_nombre|default:'' }}" placeholder="Ej: Rodrigo Morales" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="supervisor_telefono">Teléfono del supervisor *</label>
+                <input type="text" name="supervisor_telefono" id="supervisor_telefono" class="form-control mono" value="{{ obra.supervisor_telefono|default:'' }}" placeholder="+56 9 7654 3210" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="fecha_inicio">Fecha de inicio *</label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" value="{{ obra.fecha_inicio|date:'Y-m-d'|default:'' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="fecha_estimada_cierre">Fecha estimada de término *</label>
+                <input type="date" name="fecha_estimada_cierre" id="fecha_estimada_cierre" class="form-control" value="{{ obra.fecha_estimada_cierre|date:'Y-m-d'|default:'' }}" required>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
+            <a href="{% url 'obras' %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">
+                {% if editando %}Guardar Cambios{% else %}Guardar Obra{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

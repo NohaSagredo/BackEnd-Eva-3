@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Herramientas — BuildCorp{% endblock %}
+
+{% block content %}
+<div class="page-header-bar">
+    <div class="page-title-group">
+        <h1 class="page-heading">Herramientas</h1>
+        <p class="page-caption">Lista completa de herramientas, estado actual, horas de uso y ubicación.</p>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <a href="{% url 'exportar_herramientas_csv' %}" class="btn btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Descargar Excel
+        </a>
+        <a href="{% url 'herramientas_crear' %}" class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Nueva Herramienta
+        </a>
+    </div>
+</div>
+
+<div class="filter-toolbar">
+    <div class="filter-group">
+        <a href="{% url 'herramientas' %}" class="filter-pill {% if not estado_filtro %}active{% endif %}">Todas ({{ total }})</a>
+        <a href="{% url 'herramientas' %}?estado=DISPONIBLE" class="filter-pill {% if estado_filtro == 'DISPONIBLE' %}active{% endif %}">Disponibles</a>
+        <a href="{% url 'herramientas' %}?estado=EN_USO" class="filter-pill {% if estado_filtro == 'EN_USO' %}active{% endif %}">En Obra</a>
+        <a href="{% url 'herramientas' %}?estado=MANTENIMIENTO" class="filter-pill {% if estado_filtro == 'MANTENIMIENTO' %}active{% endif %}">En Mantenimiento</a>
+        <a href="{% url 'herramientas' %}?estado=DADO_DE_BAJA" class="filter-pill {% if estado_filtro == 'DADO_DE_BAJA' %}active{% endif %}">Dadas de Baja</a>
+    </div>
+
+    <form method="GET" action="{% url 'herramientas' %}" style="display: flex; gap: 6px; align-items: center;">
+        {% if estado_filtro %}<input type="hidden" name="estado" value="{{ estado_filtro }}">{% endif %}
+        <input type="text" name="q" value="{{ query }}" placeholder="Buscar por código, nombre o marca..." class="form-control" style="width: 260px;">
+        <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+        {% if query %}
+            <a href="{% url 'herramientas' %}{% if estado_filtro %}?estado={{ estado_filtro }}{% endif %}" class="btn btn-secondary btn-sm">Limpiar</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card-panel" style="margin-bottom: 24px;">
+    <div class="card-body-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="min-width: 280px;">Herramienta</th>
+                    <th>Categoría</th>
+                    <th>Horas de Uso</th>
+                    <th>Ubicación</th>
+                    <th>Estado</th>
+                    <th style="width: 170px; text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in herramientas %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="{{ h.get_imagen_url }}" alt="{{ h.nombre }}" style="width: 44px; height: 44px; object-fit: contain; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); background: #ffffff; padding: 3px; cursor: pointer; flex-shrink: 0;" onclick="verImagenAmpliada('{{ h.nombre|escapejs }}', '{{ h.get_imagen_url }}')" title="Ver foto">
+                            <div>
+                                <div style="font-weight: 600; color: var(--text-primary); font-size: 14px;">{{ h.nombre }}</div>
+                                <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                                    <span class="mono" style="font-weight: 600; color: var(--color-primary); font-size: 12px;">{{ h.codigo_inventario }}</span>
+                                    <span style="color: var(--border-medium);">&bull;</span>
+                                    <span style="font-size: 12px; color: var(--text-muted);">{{ h.marca }} {{ h.modelo }}</span>
+                                    {% if h.numero_serie %}
+                                        <span style="color: var(--border-medium);">&bull;</span>
+                                        <span class="mono" style="font-size: 11px; color: var(--text-muted);">Serie: {{ h.numero_serie }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-neutral">{{ h.categoria.nombre }}</span>
+                    </td>
+                    <td>
+                        <div class="mono" style="font-weight: 600; font-size: 13px;">
+                            {{ h.horas_uso_acumuladas }} <span style="font-weight: 400; color: var(--text-muted);">/ límite {{ h.horas_proximo_mantenimiento }} hrs</span>
+                        </div>
+                        {% if h.horas_uso_acumuladas >= h.horas_proximo_mantenimiento %}
+                            <div style="font-size: 11px; color: var(--color-danger); font-weight: 600; margin-top: 2px;">● Le toca mantenimiento</div>
+                        {% else %}
+                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Buen estado</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if h.obra_actual %}
+                            <div style="font-weight: 600; color: var(--text-primary);">{{ h.obra_actual.nombre }}</div>
+                            <div style="font-size: 11.5px; color: var(--text-muted);">En obra</div>
+                        {% else %}
+                            <div style="color: var(--text-secondary);">{{ h.bodega_actual }}</div>
+                            <div style="font-size: 11.5px; color: var(--text-muted);">En bodega</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if h.estado == 'DISPONIBLE' %}
+                            <span class="status-pill success"><span class="status-dot"></span>Disponible</span>
+                        {% elif h.estado == 'EN_USO' %}
+                            <span class="status-pill info"><span class="status-dot"></span>En obra</span>
+                        {% elif h.estado == 'MANTENIMIENTO' %}
+                            <span class="status-pill warning"><span class="status-dot"></span>En revisión</span>
+                        {% else %}
+                            <span class="status-pill neutral"><span class="status-dot"></span>De baja</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end;">
+                            <a href="{% url 'herramientas_editar' h.id %}" class="btn btn-secondary btn-sm" title="Editar">
+                                Editar
+                            </a>
+                            <form method="POST" action="{% url 'herramientas_eliminar' h.id %}" style="display: inline-block; margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar la herramienta {{ h.codigo_inventario }}?')" title="Eliminar">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 40px;">No se encontraron herramientas con esos filtros.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para ver imagen ampliada -->
+<div id="imgModal" class="modal-overlay" onclick="if(event.target === this) cerrarImgModal()">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span class="modal-title" id="modalImgTitle">Fotografía / Plano Técnico</span>
+            <button type="button" onclick="cerrarImgModal()" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+            <div style="background: #f8fafc; border-radius: var(--radius-md); padding: 24px; border: 1px solid var(--border-subtle); display: inline-flex; align-items: center; justify-content: center; width: 100%;">
+                <img id="modalImgSrc" src="" alt="Detalle" style="max-width: 100%; max-height: 320px; object-fit: contain;">
+            </div>
+            <div style="margin-top: 16px; text-align: right;">
+                <button type="button" onclick="cerrarImgModal()" class="btn btn-secondary btn-sm">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function verImagenAmpliada(nombre, url) {
+        document.getElementById('modalImgTitle').innerText = nombre;
+        document.getElementById('modalImgSrc').src = url;
+        document.getElementById('imgModal').style.display = 'flex';
+    }
+    function cerrarImgModal() {
+        document.getElementById('imgModal').style.display = 'none';
+    }
+</script>
+{% endblock %}

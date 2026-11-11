@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+  <!-- Generador Insonorizado -->
+  <rect x="35" y="55" width="130" height="90" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4"/>
+  <!-- Panel de Control y Enchufes -->
+  <rect x="45" y="65" width="45" height="40" fill="#000000" stroke="#000000" stroke-width="2"/>
+  <circle cx="55" cy="78" r="4" fill="#ffffff"/>
+  <circle cx="75" cy="78" r="4" fill="#ffffff"/>
+  <rect x="52" y="90" width="30" height="8" fill="#ffffff"/>
+  <!-- Rejillas de Ventilación -->
+  <line x1="105" y1="68" x2="150" y2="68" stroke="#000000" stroke-width="3"/>
+  <line x1="105" y1="78" x2="150" y2="78" stroke="#000000" stroke-width="3"/>
+  <line x1="105" y1="88" x2="150" y2="88" stroke="#000000" stroke-width="3"/>
+  <line x1="105" y1="98" x2="150" y2="98" stroke="#000000" stroke-width="3"/>
+  <!-- Escape y Tapón de Combustible -->
+  <rect x="135" y="45" width="16" height="10" fill="#000000"/>
+  <line x1="143" y1="45" x2="143" y2="35" stroke="#000000" stroke-width="3"/>
+  <!-- Ruedas de Transporte Industrial -->
+  <circle cx="55" cy="150" r="14" fill="#ffffff" stroke="#000000" stroke-width="4"/>
+  <circle cx="55" cy="150" r="4" fill="#000000"/>
+  <circle cx="145" cy="150" r="14" fill="#ffffff" stroke="#000000" stroke-width="4"/>
+  <circle cx="145" cy="150" r="4" fill="#000000"/>
+  <!-- Manilla -->
+  <path d="M25 75 L35 75" stroke="#000000" stroke-width="4" stroke-linecap="round"/>
+  <text x="100" y="185" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="#000000">GENERADOR DIÉSEL 7.5 KVA</text>
+</svg>

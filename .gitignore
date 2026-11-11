@@ -1,0 +1,63 @@
+# ==============================================================================
+# GITIGNORE - BUILDCORP (PROYECTO EVALUACIÓN 3 BACKEND)
+# ==============================================================================
+
+# Entornos virtuales de Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Bytecode y caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Base de datos local
+*.sqlite3
+*.db
+
+# Archivos de entorno y credenciales sensibles
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+
+# Archivos estáticos recopilados y multimedia subida por usuarios
+static_root/
+media/
+
+# Archivos de registro y logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos del sistema operativo e IDEs
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Guías y scripts locales de despliegue
+despliegue_aws/
+
+# Pautas de evaluación, enunciados de prueba y nóminas de curso (Word/Excel/PDF)
+*.docx
+*.xlsx
+*.pdf

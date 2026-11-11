@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}404 — Página no encontrada | BuildCorp{% endblock %}
+
+{% block content %}
+<div style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0;">
+    <div class="card-panel" style="max-width: 600px; width: 100%; padding: 36px 32px; text-align: center; box-shadow: var(--shadow-lg);">
+        <div class="mono" style="font-size: 64px; font-weight: 900; line-height: 1; letter-spacing: -0.05em; color: var(--color-primary); margin-bottom: 8px;">
+            404
+        </div>
+        <h1 style="font-size: 18px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 8px;">
+            Página o herramienta no encontrada
+        </h1>
+        <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px;">
+            La página, herramienta o préstamo que estás buscando no existe o fue cambiada de lugar.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                Ir al Inicio
+            </a>
+            <a href="{% url 'herramientas' %}" class="btn btn-secondary">
+                Ver Herramientas
+            </a>
+            <a href="{% url 'prestamos' %}" class="btn btn-secondary">
+                Ver Préstamos
+            </a>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-size: 11px; color: var(--text-muted);" class="mono">
+            BUILDCORP &bull; ERROR 404
+        </div>
+    </div>
+</div>
+{% endblock %}

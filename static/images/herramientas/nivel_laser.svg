@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+  <!-- Base Tripié / Soporte -->
+  <line x1="100" y1="130" x2="60" y2="180" stroke="#000000" stroke-width="4"/>
+  <line x1="100" y1="130" x2="140" y2="180" stroke="#000000" stroke-width="4"/>
+  <line x1="100" y1="130" x2="100" y2="180" stroke="#000000" stroke-width="4"/>
+  <!-- Cuerpo del Nivel Láser -->
+  <rect x="65" y="60" width="70" height="70" rx="6" fill="#000000" stroke="#000000" stroke-width="2"/>
+  <!-- Torreta Láser 360 -->
+  <polygon points="80,60 120,60 115,35 85,35" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+  <circle cx="100" cy="48" r="6" fill="#000000"/>
+  <!-- Ventanas Ópticas -->
+  <rect x="75" y="75" width="50" height="20" fill="#ffffff" stroke="#ffffff" stroke-width="1"/>
+  <line x1="75" y1="85" x2="125" y2="85" stroke="#000000" stroke-width="2"/>
+  <!-- Haz Láser Cruzado (Ejes) -->
+  <line x1="20" y1="85" x2="65" y2="85" stroke="#000000" stroke-width="2" stroke-dasharray="4,3"/>
+  <line x1="135" y1="85" x2="180" y2="85" stroke="#000000" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="100" y="196" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="#000000">NIVEL LÁSER AUTONIVELANTE 360°</text>
+</svg>
