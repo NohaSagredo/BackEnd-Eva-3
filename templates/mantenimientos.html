@@ -3,102 +3,102 @@
 {% block title %}Mantenimiento — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="page-header-bar">
-    <div class="page-title-group">
-        <h1 class="page-heading">Mantenimiento y Reparaciones</h1>
-        <p class="page-caption">Control de revisiones técnicas, horas de uso y reactivación de herramientas.</p>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">Mantenimiento y Reparaciones</h1>
+        <p class="text-secondary small mb-0">Control de órdenes técnicas, revisiones preventivas, costos y reincorporación de equipos.</p>
     </div>
-    <div style="display: flex; gap: 8px;">
-        <a href="{% url 'exportar_mantenimientos_csv' %}" class="btn btn-secondary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            Descargar Excel
+    <div class="d-flex gap-2">
+        <a href="{% url 'exportar_mantenimientos_csv' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 fw-medium shadow-sm">
+            <i class="bi bi-file-earmark-excel"></i>
+            <span>Descargar Excel</span>
         </a>
-        <a href="{% url 'mantenimientos_crear' %}" class="btn btn-primary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Nuevo Mantenimiento
+        <a href="{% url 'mantenimientos_crear' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold shadow-sm">
+            <i class="bi bi-plus-lg"></i>
+            <span>Nuevo Mantenimiento</span>
         </a>
     </div>
 </div>
 
-<div class="card-panel" style="margin-bottom: 24px;">
-    <div class="card-body-scroll">
-        <table class="data-table">
-            <thead>
+<div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
                 <tr>
-                    <th style="min-width: 260px;">Herramienta y Orden</th>
+                    <th class="ps-4" style="min-width: 260px;">Herramienta y Orden</th>
                     <th>Tipo y Técnico</th>
                     <th>Horas y Fecha</th>
                     <th>Estado y Costo</th>
-                    <th style="width: 260px; text-align: right;">Acciones</th>
+                    <th class="pe-4 text-end" style="width: 270px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for m in mantenimientos %}
                 <tr>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <img src="{{ m.herramienta.get_imagen_url }}" alt="{{ m.herramienta.nombre }}" style="width: 40px; height: 40px; object-fit: contain; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); background: #ffffff; padding: 3px; flex-shrink: 0;">
+                    <td class="ps-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="{{ m.herramienta.get_imagen_url }}" alt="{{ m.herramienta.nombre }}" class="rounded-2 border p-1 bg-white flex-shrink-0" style="width: 44px; height: 44px; object-fit: contain;">
                             <div>
-                                <div class="mono" style="font-weight: 700; color: var(--color-primary); font-size: 13px;">{{ m.codigo_orden }}</div>
-                                <div style="font-weight: 600; color: var(--text-primary); font-size: 14px;">{{ m.herramienta.nombre }}</div>
-                                <div class="mono" style="font-size: 11px; color: var(--text-muted);">{{ m.herramienta.codigo_inventario }} &bull; {{ m.herramienta.marca }}</div>
+                                <div class="mono fw-bold text-primary small">{{ m.codigo_orden }}</div>
+                                <div class="fw-semibold text-dark small">{{ m.herramienta.nombre }}</div>
+                                <div class="mono text-muted small" style="font-size: 0.75rem;">{{ m.herramienta.codigo_inventario }} &bull; {{ m.herramienta.marca }}</div>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <span class="badge badge-neutral">{{ m.get_tipo_display }}</span>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Técnico: {{ m.tecnico_responsable }}</div>
+                        <span class="badge bg-light text-secondary border small">{{ m.get_tipo_display }}</span>
+                        <div class="text-secondary small mt-1" style="font-size: 0.75rem;"><i class="bi bi-person me-1"></i>{{ m.tecnico_responsable }}</div>
                     </td>
-                    <td class="mono" style="font-size: 13px;">
-                        <div style="font-weight: 600; color: var(--text-primary);">{{ m.horas_al_momento }} hrs</div>
-                        <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Fecha: {{ m.fecha_programada|date:"d/m/Y" }}</div>
+                    <td>
+                        <div class="mono small fw-bold text-dark">{{ m.horas_al_momento }} hrs</div>
+                        <div class="text-secondary small mt-1" style="font-size: 0.75rem;">Fecha: {{ m.fecha_programada|date:"d/m/Y" }}</div>
                     </td>
                     <td>
                         <div>
                             {% if m.estado == 'PROGRAMADO' %}
-                                <span class="status-pill warning"><span class="status-dot"></span>Programado</span>
+                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"><i class="bi bi-hourglass-split me-1"></i>Programado</span>
                             {% elif m.estado == 'EN_PROCESO' %}
-                                <span class="status-pill info"><span class="status-dot"></span>En taller</span>
+                                <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle"><i class="bi bi-gear-fill me-1"></i>En taller</span>
                             {% elif m.estado == 'COMPLETADO' %}
-                                <span class="status-pill success"><span class="status-dot"></span>Listo</span>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2 me-1"></i>Listo</span>
                             {% else %}
-                                <span class="status-pill neutral"><span class="status-dot"></span>Cancelado</span>
+                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="bi bi-x-circle me-1"></i>Cancelado</span>
                             {% endif %}
                         </div>
-                        <div class="mono" style="font-size: 12.5px; font-weight: 600; margin-top: 3px;">
+                        <div class="mono small fw-semibold text-dark mt-1">
                             {% if m.costo > 0 %}
                                 ${{ m.costo|floatformat:0 }} CLP
                             {% else %}
-                                <span style="color: var(--text-muted); font-weight: 400;">Sin costo</span>
+                                <span class="text-muted fw-normal" style="font-size: 0.75rem;">Sin costo</span>
                             {% endif %}
                         </div>
                     </td>
-                    <td style="text-align: right;">
-                        <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end;">
+                    <td class="pe-4 text-end">
+                        <div class="d-inline-flex gap-2 align-items-center justify-content-end">
                             {% if m.estado != 'COMPLETADO' and m.estado != 'CANCELADO' %}
-                                <form method="POST" action="{% url 'mantenimientos' %}" style="display: inline-flex; gap: 4px; align-items: center; margin: 0;">
+                                <form method="POST" action="{% url 'mantenimientos' %}" class="d-inline-flex gap-1 align-items-center m-0">
                                     {% csrf_token %}
                                     <input type="hidden" name="mantenimiento_id" value="{{ m.id }}">
-                                    <input type="number" name="costo" placeholder="Costo CLP" value="{{ m.costo|floatformat:0 }}" class="form-control mono" style="width: 100px; padding: 4px 8px; font-size: 12px; height: 30px;">
-                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Confirmar término del mantenimiento y dejar la herramienta lista y DISPONIBLE?')" title="Finalizar Mantenimiento">
-                                        Listo ✓
+                                    <input type="number" name="costo" placeholder="Costo CLP" value="{{ m.costo|floatformat:0 }}" class="form-control form-control-sm mono text-end" style="width: 105px;">
+                                    <button type="submit" class="btn btn-success btn-sm py-1 px-2 fw-semibold d-inline-flex align-items-center gap-1" onclick="return confirm('¿Confirmar término del mantenimiento y dejar la herramienta lista y DISPONIBLE?')" title="Finalizar Mantenimiento">
+                                        <i class="bi bi-check2"></i> Listo
                                     </button>
                                 </form>
-                                <form method="POST" action="{% url 'mantenimientos_eliminar' m.id %}" style="display: inline-block; margin: 0;">
+                                <form method="POST" action="{% url 'mantenimientos_eliminar' m.id %}" class="d-inline m-0">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Cancelar esta orden de mantenimiento?')" title="Cancelar Orden">
-                                        ✕
+                                    <button type="submit" class="btn btn-outline-danger btn-sm py-1 px-2" onclick="return confirm('¿Cancelar esta orden de mantenimiento?')" title="Cancelar Orden">
+                                        <i class="bi bi-x-lg"></i>
                                     </button>
                                 </form>
                             {% else %}
-                                <span class="status-pill neutral">Terminado</span>
+                                <span class="badge bg-light text-secondary border">Terminado</span>
                             {% endif %}
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px;">No hay órdenes de mantenimiento registradas.</td>
+                    <td colspan="5" class="text-center text-secondary py-5 small">No hay órdenes de mantenimiento registradas.</td>
                 </tr>
                 {% endfor %}
             </tbody>

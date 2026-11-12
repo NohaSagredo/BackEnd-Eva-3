@@ -3,31 +3,35 @@
 {% block title %}Nuevo Préstamo — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="page-header-bar" style="margin-bottom: 18px;">
-    <div class="page-title-group">
-        <h1 class="page-heading">Nuevo Préstamo de Herramientas</h1>
-        <p class="page-caption">Completa los datos de entrega, selecciona las herramientas y solicita la firma en pantalla.</p>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">Nuevo Préstamo de Herramientas</h1>
+        <p class="text-secondary small mb-0">Completa los datos de destino, selecciona las herramientas y captura la firma digital en pantalla.</p>
     </div>
-    <a href="{% url 'prestamos' %}" class="btn btn-secondary">&larr; Volver a Préstamos</a>
+    <a href="{% url 'prestamos' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1">
+        <i class="bi bi-arrow-left"></i>
+        <span>Volver a Préstamos</span>
+    </a>
 </div>
 
-<form method="POST" action="{% url 'nuevo_prestamo' %}" id="prestamoForm" style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;">
+<form method="POST" action="{% url 'nuevo_prestamo' %}" id="prestamoForm" class="mb-4">
     {% csrf_token %}
     <input type="hidden" name="firma_digital_entrega" id="firmaDigitalInput">
 
-    <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px;">
-        <!-- COLUMNA IZQUIERDA: DATOS GENERALES Y SELECCIÓN DE HERRAMIENTAS -->
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div class="form-card">
-                <div style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    1. Obra y Contratista
-                </div>
+    <div class="row g-4">
+        <!-- COLUMNA IZQUIERDA: DATOS GENERALES Y CATÁLOGO DE ACTIVOS -->
+        <div class="col-12 col-xl-7 d-flex flex-column gap-4">
+            <!-- TARJETA 1: DESTINO Y CONTRATISTA -->
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+                <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                    <i class="bi bi-geo-alt-fill text-primary"></i>
+                    1. Obra de Destino y Contratista
+                </h6>
 
-                <div class="form-grid" style="margin-bottom: 0;">
-                    <div class="form-group">
-                        <label class="form-label" for="obraSelect">Obra de destino *</label>
-                        <select name="obra" id="obraSelect" class="form-control" required>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-semibold text-secondary" for="obraSelect">Obra de destino *</label>
+                        <select name="obra" id="obraSelect" class="form-select" required>
                             <option value="">-- Elige la obra --</option>
                             {% for o in obras %}
                                 <option value="{{ o.id }}">{{ o.codigo }} - {{ o.nombre }}</option>
@@ -35,9 +39,9 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="contratistaSelect">Contratista *</label>
-                        <select name="contratista" id="contratistaSelect" class="form-control" required onchange="verificarContratista(this)">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-semibold text-secondary" for="contratistaSelect">Contratista *</label>
+                        <select name="contratista" id="contratistaSelect" class="form-select" required onchange="verificarContratista(this)">
                             <option value="">-- Elige el contratista --</option>
                             {% for c in contratistas %}
                                 <option value="{{ c.id }}" data-estado="{{ c.estado }}" data-motivo="{{ c.motivo_bloqueo|escapejs }}">
@@ -48,67 +52,69 @@
                     </div>
 
                     <!-- Banner reactivo de bloqueo -->
-                    <div id="bannerBloqueo" class="form-group full" style="display: none; background: var(--color-danger-bg); border: 1px solid var(--color-danger-border); border-radius: var(--radius-md); padding: 14px 18px;">
-                        <div style="font-size: 13.5px; font-weight: 800; color: var(--color-danger); display: flex; align-items: center; gap: 8px;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                            ATENCIÓN: CONTRATISTA BLOQUEADO POR ATRASO
-                        </div>
-                        <div style="font-size: 13px; color: #7f1d1d; margin-top: 4px;" id="motivoBloqueoTexto">
-                            Este contratista tiene herramientas atrasadas y no puede pedir más hasta devolverlas.
+                    <div id="bannerBloqueo" class="col-12" style="display: none;">
+                        <div class="alert alert-danger border-danger-subtle d-flex align-items-start gap-2 mb-0 p-3 rounded-3">
+                            <i class="bi bi-exclamation-triangle-fill fs-5 mt-1"></i>
+                            <div>
+                                <div class="fw-bold text-danger">ATENCIÓN: CONTRATISTA BLOQUEADO POR ATRASO</div>
+                                <div class="small text-danger-emphasis mt-1" id="motivoBloqueoTexto">
+                                    Este contratista tiene herramientas atrasadas y no puede pedir más hasta devolverlas.
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="fechaPactada">Fecha de devolución pactada *</label>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-semibold text-secondary" for="fechaPactada">Fecha de devolución pactada *</label>
                         <input type="date" name="fecha_pactada_devolucion" id="fechaPactada" class="form-control" required min="{{ hoy|date:'Y-m-d' }}">
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Entregado por (Bodeguero)</label>
-                        <input type="text" class="form-control" value="{{ request.user.username }}" disabled style="background: var(--bg-subtle);">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-semibold text-secondary">Despachado por (Bodeguero)</label>
+                        <input type="text" class="form-control bg-light" value="{{ request.user.username }}" disabled>
                     </div>
                 </div>
             </div>
 
-            <!-- TABLA DE ACTIVOS A ASIGNAR -->
-            <div class="card-panel">
-                <div class="card-header-bar">
-                    <span class="card-title">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <!-- TARJETA 2: TABLA DE HERRAMIENTAS DISPONIBLES -->
+            <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white">
+                <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-tools text-primary"></i>
                         2. Herramientas a entregar *
                     </span>
-                    <span style="font-size: 12.5px; color: var(--text-muted);">Selecciona las herramientas que se prestarán</span>
+                    <span class="text-secondary small">Selecciona los equipos a despachar</span>
                 </div>
-                <div class="card-body-scroll" style="max-height: 380px;">
-                    <table class="data-table">
-                        <thead>
+                <div class="table-responsive" style="max-height: 380px;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light sticky-top">
                             <tr>
-                                <th style="width: 44px; text-align: center;">Elegir</th>
+                                <th class="ps-4 text-center" style="width: 50px;">Elegir</th>
                                 <th>Código</th>
                                 <th>Herramienta</th>
                                 <th>Categoría</th>
-                                <th>Horas de uso</th>
+                                <th class="pe-4">Horas de uso</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for h in herramientas_disponibles %}
                             <tr>
-                                <td style="text-align: center;">
-                                    <input type="checkbox" name="herramientas" value="{{ h.id }}" id="tool_{{ h.id }}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--color-primary);">
-                                </td>
-                                <td class="mono" style="font-weight: 700; color: var(--color-primary); font-size: 13.5px;">
-                                    <label for="tool_{{ h.id }}" style="cursor: pointer;">{{ h.codigo_inventario }}</label>
+                                <td class="ps-4 text-center">
+                                    <input type="checkbox" name="herramientas" value="{{ h.id }}" id="tool_{{ h.id }}" class="form-check-input" style="cursor: pointer; width: 1.25rem; height: 1.25rem;">
                                 </td>
                                 <td>
-                                    <label for="tool_{{ h.id }}" style="cursor: pointer; font-weight: 700; font-size: 14px;">{{ h.nombre }}</label>
-                                    <div style="font-size: 12.5px; color: var(--text-muted);">{{ h.marca }} {{ h.modelo }}</div>
+                                    <label for="tool_{{ h.id }}" class="mono fw-bold text-primary small mb-0" style="cursor: pointer;">{{ h.codigo_inventario }}</label>
                                 </td>
-                                <td><span class="badge badge-neutral">{{ h.categoria.nombre }}</span></td>
-                                <td class="mono" style="font-size: 13.5px; font-weight: 600;">{{ h.horas_uso_acumuladas }} hrs</td>
+                                <td>
+                                    <label for="tool_{{ h.id }}" class="fw-semibold text-dark small mb-0 d-block" style="cursor: pointer;">{{ h.nombre }}</label>
+                                    <div class="text-secondary small" style="font-size: 0.75rem;">{{ h.marca }} {{ h.modelo }}</div>
+                                </td>
+                                <td><span class="badge bg-light text-secondary border small">{{ h.categoria.nombre }}</span></td>
+                                <td class="pe-4 mono small fw-semibold text-dark">{{ h.horas_uso_acumuladas }} hrs</td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 32px;">No hay herramientas disponibles en bodega en este momento.</td>
+                                <td colspan="5" class="text-center text-secondary py-4 small">No hay herramientas disponibles en bodega en este momento.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -118,43 +124,51 @@
         </div>
 
         <!-- COLUMNA DERECHA: RECEPTOR Y FIRMA DIGITAL -->
-        <div class="form-card" style="display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-                <div style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    3. Datos de quién recibe y firma *
+        <div class="col-12 col-xl-5">
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-pen-fill text-primary"></i>
+                        3. Datos de quién recibe y firma digital *
+                    </h6>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-secondary" for="receptorNombre">Nombre completo del receptor *</label>
+                            <input type="text" name="receptor_nombre" id="receptorNombre" class="form-control" placeholder="Ej: Juan Carlos Soto" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-secondary" for="receptorRut">RUT del receptor *</label>
+                            <input type="text" name="receptor_rut" id="receptorRut" class="form-control mono" placeholder="Ej: 16.789.123-4" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-secondary" for="obsEntrega">Notas u observaciones (opcional)</label>
+                            <textarea name="observaciones_entrega" id="obsEntrega" class="form-control" rows="2" placeholder="Detalles de entrega, accesorios incluidos, cables..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- RECUADRO DE FIRMA DIGITAL EN PANTALLA -->
+                    <div class="border rounded-3 p-3 bg-light text-center">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label small fw-semibold text-secondary mb-0">Firma en pantalla (mouse o táctil):</label>
+                            <button type="button" onclick="limpiarFirma()" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size: 0.78rem;">
+                                <i class="bi bi-eraser"></i> Limpiar firma
+                            </button>
+                        </div>
+                        <canvas id="signatureCanvas" width="480" height="150" class="w-100 border rounded-2 bg-white" style="max-width: 480px; height: 150px;"></canvas>
+                        <div id="firmaStatus" class="small text-secondary mt-2 fw-medium" style="font-size: 0.78rem;">
+                            Esperando trazo de firma en el recuadro...
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-grid" style="margin-bottom: 16px;">
-                    <div class="form-group">
-                        <label class="form-label" for="receptorNombre">Nombre de quién recibe *</label>
-                        <input type="text" name="receptor_nombre" id="receptorNombre" class="form-control" placeholder="Ej: Juan Carlos Soto" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="receptorRut">RUT de quién recibe *</label>
-                        <input type="text" name="receptor_rut" id="receptorRut" class="form-control mono" placeholder="Ej: 16.789.123-4" required>
-                    </div>
-                    <div class="form-group full">
-                        <label class="form-label" for="obsEntrega">Notas u observaciones (opcional)</label>
-                        <textarea name="observaciones_entrega" id="obsEntrega" class="form-control" rows="2" placeholder="Detalles del estado de entrega, accesorios incluidos, cables..."></textarea>
-                    </div>
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <a href="{% url 'prestamos' %}" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" id="btnEmitir" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 py-2 fw-semibold">
+                        <i class="bi bi-check2-circle fs-5"></i>
+                        <span>Guardar Préstamo</span>
+                    </button>
                 </div>
-
-                <div class="signature-container">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                        <label class="form-label" style="margin-bottom: 0;">Firma en pantalla (mouse o dedo en pantalla táctil):</label>
-                        <button type="button" onclick="limpiarFirma()" class="btn btn-secondary btn-sm">Limpiar firma</button>
-                    </div>
-                    <canvas id="signatureCanvas" width="520" height="160" style="width: 100%; max-width: 520px;"></canvas>
-                    <div id="firmaStatus" style="font-size: 12.5px; font-weight: 600; color: var(--text-muted);">Esperando firma en el recuadro...</div>
-                </div>
-            </div>
-
-            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
-                <a href="{% url 'prestamos' %}" class="btn btn-secondary">Cancelar</a>
-                <button type="submit" id="btnEmitir" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px;">
-                    Guardar Préstamo
-                </button>
             </div>
         </div>
     </div>
@@ -170,15 +184,13 @@
 
         if (estado === 'BLOQUEADO_MOROSIDAD') {
             banner.style.display = 'block';
-            document.getElementById('motivoBloqueoTexto').innerText = motivo || 'Contratista con morosidad crítica activa en faena.';
+            document.getElementById('motivoBloqueoTexto').innerText = motivo || 'Contratista con atraso activo en faena.';
             btn.disabled = true;
-            btn.style.opacity = '0.4';
-            btn.style.cursor = 'not-allowed';
+            btn.classList.add('opacity-50');
         } else {
             banner.style.display = 'none';
             btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
+            btn.classList.remove('opacity-50');
         }
     }
 
@@ -188,7 +200,7 @@
     const firmaInput = document.getElementById('firmaDigitalInput');
 
     ctx.strokeStyle = "#0f172a";
-    ctx.lineWidth = 2.8;
+    ctx.lineWidth = 2.6;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
@@ -221,7 +233,7 @@
         ctx.stroke();
         tieneTrazo = true;
         statusText.innerText = "✓ Firma digital estampada correctamente";
-        statusText.style.color = "var(--color-success)";
+        statusText.className = "small text-success mt-2 fw-semibold";
     }
 
     function terminar() {
@@ -246,8 +258,8 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         tieneTrazo = false;
         firmaInput.value = "";
-        statusText.innerText = "Esperando trazo digital en el recuadro...";
-        statusText.style.color = "var(--text-muted)";
+        statusText.innerText = "Esperando trazo de firma en el recuadro...";
+        statusText.className = "small text-secondary mt-2 fw-medium";
     }
 
     document.getElementById('prestamoForm').addEventListener('submit', function(e) {

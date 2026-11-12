@@ -3,69 +3,78 @@
 {% block title %}Programar Mantenimiento — BuildCorp{% endblock %}
 
 {% block content %}
-<div style="max-width: 840px; margin: 0 auto; width: 100%;">
-    <div class="page-header-bar" style="margin-bottom: 18px;">
-        <div class="page-title-group">
-            <h1 class="page-heading">Programar Mantenimiento</h1>
-            <p class="page-caption">Crea una orden para revisión preventiva, reparación o calibración de una herramienta.</p>
+<div class="container-fluid px-0" style="max-width: 860px;">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">Programar Mantenimiento</h1>
+            <p class="text-secondary small mb-0">Crea una orden para revisión preventiva, reparación o calibración de una herramienta.</p>
         </div>
-        <a href="{% url 'mantenimientos' %}" class="btn btn-secondary">&larr; Volver a Mantenimientos</a>
+        <a href="{% url 'mantenimientos' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1">
+            <i class="bi bi-arrow-left"></i>
+            <span>Volver a Mantenimientos</span>
+        </a>
     </div>
 
-    <form method="POST" class="form-card" style="margin-bottom: 32px;">
+    <form method="POST" class="card border-0 shadow-sm rounded-3 p-4 bg-white mb-4">
         {% csrf_token %}
 
-        <div class="form-grid">
-            <div class="form-group full">
-                <label class="form-label" for="herramienta">Herramienta a revisar o reparar *</label>
-                <select name="herramienta" id="herramienta" class="form-control" required>
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label small fw-semibold text-secondary" for="herramienta">Herramienta a revisar o reparar *</label>
+                <select name="herramienta" id="herramienta" class="form-select" required>
                     <option value="">-- Elige una herramienta --</option>
                     {% for h in herramientas %}
                         <option value="{{ h.id }}">
-                            [{{ h.codigo_inventario }}] {{ h.nombre }} ({{ h.marca }} {{ h.modelo }}) - Uso: {{ h.horas_uso_acumuladas }} hrs [Estado: {{ h.get_estado_display }}]
+                            [{{ h.codigo_inventario }}] {{ h.nombre }} ({{ h.marca }} {{ h.modelo }}) - Horas: {{ h.horas_uso_acumuladas }} hrs [Estado: {{ h.get_estado_display }}]
                         </option>
                     {% endfor %}
                 </select>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="tipo">Tipo de revisión *</label>
-                <select name="tipo" id="tipo" class="form-control" required>
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold text-secondary" for="tipo">Tipo de revisión *</label>
+                <select name="tipo" id="tipo" class="form-select" required>
                     <option value="PREVENTIVO">Mantenimiento preventivo periódico</option>
                     <option value="CORRECTIVO">Reparación por daño o falla</option>
                     <option value="CALIBRACION">Inspección y calibración</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="fecha_programada">Fecha programada *</label>
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold text-secondary" for="fecha_programada">Fecha programada *</label>
                 <input type="date" name="fecha_programada" id="fecha_programada" class="form-control" value="{{ hoy|date:'Y-m-d' }}" required>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="tecnico_responsable">Técnico o taller a cargo *</label>
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold text-secondary" for="tecnico_responsable">Técnico o taller a cargo *</label>
                 <input type="text" name="tecnico_responsable" id="tecnico_responsable" class="form-control" placeholder="Ej: Taller Central o Juan Pérez" required>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="costo_estimado">Costo estimado ($ CLP)</label>
-                <input type="number" step="1000" name="costo_estimado" id="costo_estimado" class="form-control mono" value="0">
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold text-secondary" for="costo_estimado">Costo estimado ($ CLP)</label>
+                <div class="input-group">
+                    <span class="input-group-text small text-secondary">$</span>
+                    <input type="number" step="1000" name="costo_estimado" id="costo_estimado" class="form-control mono" value="0">
+                </div>
             </div>
 
-            <div class="form-group full">
-                <label class="form-label" for="descripcion_trabajo">Trabajo a realizar o falla reportada *</label>
+            <div class="col-12">
+                <label class="form-label small fw-semibold text-secondary" for="descripcion_trabajo">Trabajo a realizar o falla reportada *</label>
                 <textarea name="descripcion_trabajo" id="descripcion_trabajo" class="form-control" rows="3" placeholder="Detalle de lo que se va a hacer: cambio de aceite, carbones, cables, etc..." required></textarea>
             </div>
 
-            <div class="form-group full">
-                <label class="form-label" for="repuestos_utilizados">Repuestos necesarios (opcional)</label>
+            <div class="col-12">
+                <label class="form-label small fw-semibold text-secondary" for="repuestos_utilizados">Repuestos necesarios (opcional)</label>
                 <input type="text" name="repuestos_utilizados" id="repuestos_utilizados" class="form-control" placeholder="Ej: Filtro de aire, bujía, carbones">
             </div>
         </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
-            <a href="{% url 'mantenimientos' %}" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">Guardar Orden</button>
+        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <a href="{% url 'mantenimientos' %}" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 fw-semibold">
+                <i class="bi bi-check2"></i>
+                <span>Guardar Orden</span>
+            </button>
         </div>
     </form>
 </div>

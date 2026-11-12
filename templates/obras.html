@@ -3,66 +3,68 @@
 {% block title %}Obras — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="page-header-bar">
-    <div class="page-title-group">
-        <h1 class="page-heading">Obras en Construcción</h1>
-        <p class="page-caption">Lista de obras, dirección, supervisor a cargo y estado actual.</p>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">Obras en Construcción</h1>
+        <p class="text-secondary small mb-0">Gestión de faenas, ubicaciones territoriales, supervisores y estado operativo.</p>
     </div>
     <div>
-        <a href="{% url 'obras_crear' %}" class="btn btn-primary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Nueva Obra
+        <a href="{% url 'obras_crear' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold shadow-sm">
+            <i class="bi bi-plus-lg"></i>
+            <span>Nueva Obra</span>
         </a>
     </div>
 </div>
 
-<div class="card-panel" style="margin-bottom: 24px;">
-    <div class="card-body-scroll">
-        <table class="data-table">
-            <thead>
+<div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
                 <tr>
-                    <th style="min-width: 240px;">Obra</th>
+                    <th class="ps-4" style="min-width: 240px;">Obra</th>
                     <th>Dirección</th>
                     <th>Supervisor</th>
                     <th>Fechas</th>
                     <th>Estado</th>
-                    <th style="width: 160px; text-align: right;">Acciones</th>
+                    <th class="pe-4 text-end" style="width: 160px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for o in obras %}
                 <tr>
+                    <td class="ps-4">
+                        <div class="fw-semibold text-dark small">{{ o.nombre }}</div>
+                        <div class="mono fw-bold text-primary small mt-1">{{ o.codigo }}</div>
+                    </td>
+                    <td class="text-secondary small">
+                        <i class="bi bi-geo-alt me-1 text-muted"></i>{{ o.direccion }}
+                    </td>
                     <td>
-                        <div style="font-weight: 600; color: var(--text-primary); font-size: 14px;">{{ o.nombre }}</div>
-                        <div class="mono" style="font-weight: 600; color: var(--color-primary); font-size: 12px; margin-top: 2px;">{{ o.codigo }}</div>
-                    </td>
-                    <td style="font-size: 13.5px; color: var(--text-secondary);">
-                        {{ o.direccion }}
+                        <div class="fw-semibold text-dark small">{{ o.supervisor_nombre }}</div>
+                        <div class="mono text-muted small mt-1" style="font-size: 0.75rem;"><i class="bi bi-telephone me-1"></i>{{ o.supervisor_telefono }}</div>
                     </td>
                     <td>
-                        <div style="font-weight: 600; font-size: 13.5px;">{{ o.supervisor_nombre }}</div>
-                        <div class="mono" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">{{ o.supervisor_telefono }}</div>
-                    </td>
-                    <td class="mono" style="font-size: 12.5px;">
-                        <div>Inicio: {{ o.fecha_inicio|date:"d/m/Y" }}</div>
-                        <div style="color: var(--text-muted);">Cierre: {{ o.fecha_estimada_cierre|date:"d/m/Y" }}</div>
+                        <div class="mono small">
+                            <div class="text-dark">Inicio: {{ o.fecha_inicio|date:"d/m/Y" }}</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Cierre: {{ o.fecha_estimada_cierre|date:"d/m/Y" }}</div>
+                        </div>
                     </td>
                     <td>
                         {% if o.activa %}
-                            <span class="status-pill success"><span class="status-dot"></span>Activa</span>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle me-1"></i>Activa</span>
                         {% else %}
-                            <span class="status-pill neutral"><span class="status-dot"></span>Finalizada</span>
+                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="bi bi-flag me-1"></i>Finalizada</span>
                         {% endif %}
                     </td>
-                    <td style="text-align: right;">
-                        <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end;">
-                            <a href="{% url 'obras_editar' o.id %}" class="btn btn-secondary btn-sm" title="Editar Obra">
-                                Editar
+                    <td class="pe-4 text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'obras_editar' o.id %}" class="btn btn-outline-secondary" title="Editar Obra">
+                                <i class="bi bi-pencil-square"></i>
                             </a>
-                            <form method="POST" action="{% url 'obras_eliminar' o.id %}" style="display: inline-block; margin: 0;">
+                            <form method="POST" action="{% url 'obras_eliminar' o.id %}" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar la obra {{ o.codigo }}?')">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar la obra {{ o.codigo }}?')" title="Eliminar Obra">
-                                    Eliminar
+                                <button type="submit" class="btn btn-outline-danger" title="Eliminar Obra">
+                                    <i class="bi bi-trash"></i>
                                 </button>
                             </form>
                         </div>
@@ -70,7 +72,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 40px;">No hay obras registradas.</td>
+                    <td colspan="6" class="text-center text-secondary py-5 small">No hay obras registradas en la base de datos.</td>
                 </tr>
                 {% endfor %}
             </tbody>

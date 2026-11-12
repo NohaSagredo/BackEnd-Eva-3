@@ -4,597 +4,280 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}BuildCorp — Control Central de Activos{% endblock %}</title>
+
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Icons 1.11.3 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
         :root {
-            --bg-canvas: #f8fafc;
-            --bg-surface: #ffffff;
-            --bg-subtle: #f1f5f9;
-            --bg-muted: #e2e8f0;
-            --bg-header: #0f172a;
-
-            --border-subtle: #e2e8f0;
-            --border-medium: #cbd5e1;
-            --border-focus: #2563eb;
-
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --text-inverted: #ffffff;
-
-            --color-primary: #2563eb;
-            --color-primary-hover: #1d4ed8;
-            --color-primary-subtle: #eff6ff;
-
-            --color-success: #059669;
-            --color-success-bg: #ecfdf5;
-            --color-success-border: #a7f3d0;
-
-            --color-warning: #d97706;
-            --color-warning-bg: #fffbeb;
-            --color-warning-border: #fde68a;
-
-            --color-danger: #dc2626;
-            --color-danger-bg: #fef2f2;
-            --color-danger-border: #fecaca;
-
-            --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-            --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
-            --shadow-dropdown: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
-            --shadow-modal: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
-
-            --radius-xs: 4px;
-            --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-pill: 9999px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --bs-primary: #2563eb;
+            --bs-primary-rgb: 37, 99, 235;
+            --bs-body-bg: #f8fafc;
+            --bs-body-color: #0f172a;
+            --bs-border-color: #e2e8f0;
+            --theme-slate-dark: #0f172a;
+            --theme-slate-subtle: #1e293b;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, system-ui, sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--text-primary);
-            line-height: 1.5;
-            font-size: 14.5px;
-            -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* BARRA SUPERIOR MINIMALISTA */
-        header.top-header {
-            background-color: var(--bg-header);
-            color: #ffffff;
-            height: 52px;
-            padding: 0 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* NAVBAR SUPERIOR CON ESTILO SLATE */
+        .navbar-buildcorp {
+            background-color: var(--theme-slate-dark) !important;
             border-bottom: 1px solid #1e293b;
-            flex-shrink: 0;
-            z-index: 40;
-        }
-
-        .header-left-group {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .btn-sidebar-toggle {
-            background-color: #1e293b;
-            color: #ffffff;
-            border: 1px solid #334155;
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.15s ease;
-        }
-
-        .btn-sidebar-toggle:hover {
-            background-color: #334155;
-            border-color: #475569;
-        }
-
-        .btn-sidebar-toggle:focus-visible {
-            outline: 2px solid #3b82f6;
-            outline-offset: 2px;
-        }
-
-        .brand-block {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            padding-top: 0.55rem;
+            padding-bottom: 0.55rem;
         }
 
         .brand-badge-logo {
-            background: #2563eb;
+            background-color: #2563eb;
             color: #ffffff;
             font-size: 13px;
             font-weight: 800;
-            letter-spacing: -0.02em;
             padding: 4px 8px;
-            border-radius: var(--radius-sm);
+            border-radius: 6px;
             display: inline-flex;
             align-items: center;
+            letter-spacing: -0.02em;
         }
 
-        .brand-title {
-            font-size: 16px;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-            color: #ffffff;
-        }
-
-        .brand-sub {
-            font-size: 12px;
-            font-weight: 400;
-            color: #94a3b8;
-            border-left: 1px solid #334155;
-            padding-left: 12px;
-            margin-left: 4px;
-        }
-
-        .user-block {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 13px;
-        }
-
-        .user-badge {
-            background-color: #1e293b;
-            color: #e2e8f0;
-            padding: 5px 12px;
-            border-radius: var(--radius-pill);
-            font-size: 12px;
-            font-weight: 500;
-            border: 1px solid #334155;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .user-badge-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background-color: #10b981;
-        }
-
-        .btn-logout {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 12.5px;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: var(--radius-sm);
-            transition: all 0.15s ease;
-        }
-
-        .btn-logout:hover {
-            color: #ffffff;
-            background-color: #1e293b;
-        }
-
-        /* TELÓN DE FONDO (BACKDROP) */
-        .sidebar-backdrop {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(15, 23, 42, 0.45);
-            backdrop-filter: blur(2px);
-            z-index: 998;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
-        }
-
-        .sidebar-backdrop.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* MENÚ VERTICAL DESPLEGABLE DESDE LA IZQUIERDA (DRAWER) */
-        aside.sidebar-drawer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 310px;
-            max-width: 88vw;
-            height: 100vh;
+        /* OFFCANVAS DRAWER */
+        .offcanvas-buildcorp {
+            width: 300px !important;
             background-color: #ffffff;
-            box-shadow: 6px 0 28px rgba(15, 23, 42, 0.2);
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            transform: translateX(-100%);
-            transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
-            visibility: hidden;
+            border-right: 1px solid #e2e8f0;
         }
 
-        aside.sidebar-drawer.active {
-            transform: translateX(0);
-            visibility: visible;
-        }
-
-        /* HEADER DEL DRAWER */
-        .sidebar-header {
-            height: 52px;
-            background-color: var(--bg-header);
+        .offcanvas-buildcorp .offcanvas-header {
+            background-color: var(--theme-slate-dark);
             color: #ffffff;
-            padding: 0 16px 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             border-bottom: 1px solid #1e293b;
-            flex-shrink: 0;
+            padding: 0.9rem 1.25rem;
         }
 
-        .sidebar-brand-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar-brand-title {
-            font-size: 15px;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-            color: #ffffff;
-            line-height: 1.1;
-        }
-
-        .sidebar-brand-sub {
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
-        .btn-sidebar-close {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .btn-sidebar-close:hover {
-            color: #ffffff;
-            background-color: #1e293b;
-        }
-
-        /* CONTENIDO INTERNO DEL DRAWER */
-        .sidebar-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 14px;
-        }
-
-        .sidebar-section-heading {
-            font-size: 11px;
+        .offcanvas-nav-heading {
+            font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #94a3b8;
-            padding: 10px 10px 4px;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            padding: 0.6rem 0.75rem 0.25rem;
+            margin-top: 0.5rem;
         }
 
-        .sidebar-nav-list {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            list-style: none;
-            margin-bottom: 14px;
-        }
-
-        .sidebar-nav-link {
+        .offcanvas-nav-link {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 12px;
-            border-radius: var(--radius-md);
-            font-size: 14px;
+            padding: 0.6rem 0.85rem;
+            border-radius: 8px;
+            color: #475569;
+            font-size: 0.92rem;
             font-weight: 500;
-            color: var(--text-secondary);
             text-decoration: none;
-            transition: all 0.15s ease;
+            transition: all 0.15s ease-in-out;
             border: 1px solid transparent;
         }
 
-        .sidebar-nav-link:hover {
+        .offcanvas-nav-link:hover {
             background-color: #f1f5f9;
-            color: var(--text-primary);
+            color: #0f172a;
         }
 
-        .sidebar-nav-link.active {
+        .offcanvas-nav-link.active {
             background-color: #eff6ff;
             color: #2563eb;
             font-weight: 600;
             border-color: #bfdbfe;
         }
 
-        .sidebar-nav-link.active .sidebar-icon {
+        .offcanvas-nav-link i {
+            font-size: 1.15rem;
+            color: #64748b;
+            transition: color 0.15s ease-in-out;
+        }
+
+        .offcanvas-nav-link.active i,
+        .offcanvas-nav-link:hover i {
             color: #2563eb;
         }
 
-        .sidebar-icon {
-            flex-shrink: 0;
-            color: #64748b;
-            transition: color 0.15s ease;
-        }
-
-        .sidebar-nav-link.external {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        .sidebar-nav-link.external .external-badge {
-            margin-left: auto;
-            font-size: 11px;
-            background-color: #f1f5f9;
-            color: #64748b;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid var(--border-subtle);
-        }
-
-        /* PIE DEL DRAWER */
-        .sidebar-footer {
-            padding: 12px 18px;
+        /* PIE DEL OFFCANVAS */
+        .offcanvas-buildcorp-footer {
+            padding: 0.85rem 1.25rem;
             background-color: #f8fafc;
-            border-top: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
+            border-top: 1px solid #e2e8f0;
         }
 
-        .sidebar-user-details {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-        }
-
-        .sidebar-user-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            line-height: 1.2;
-        }
-
-        .sidebar-user-role {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* CONTENEDOR PRINCIPAL ERGONÓMICO */
+        /* CONTENIDO PRINCIPAL */
         main.main-viewport {
-            max-width: 1440px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 24px 28px;
             flex: 1;
-            display: flex;
-            flex-direction: column;
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 1.75rem 1.5rem 2.5rem;
         }
 
-        /* ENCABEZADOS DE PÁGINA */
+        /* COMPATIBILIDAD CON VISTAS EXISTENTES */
         .page-header-bar {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            flex-shrink: 0;
-            flex-wrap: wrap;
-            gap: 12px;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .page-title-group h1.page-heading {
-            font-size: 22px;
+        .page-heading {
+            font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: var(--text-primary);
+            color: #0f172a;
+            margin: 0;
             line-height: 1.25;
         }
 
-        .page-title-group p.page-caption {
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            margin-top: 3px;
+        .page-caption {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+            margin-bottom: 0;
         }
 
-        /* ALERTAS Y MENSAJES */
-        .alerts-wrapper {
-            margin-bottom: 16px;
-            flex-shrink: 0;
-        }
-
-        .alert-box {
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            font-size: 13px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid var(--border-subtle);
-            background-color: #ffffff;
-            margin-bottom: 8px;
-            box-shadow: var(--shadow-xs);
-        }
-
-        .alert-box.success {
-            background-color: var(--color-success-bg);
-            color: var(--color-success);
-            border-color: var(--color-success-border);
-        }
-
-        .alert-box.error {
-            background-color: var(--color-danger-bg);
-            color: var(--color-danger);
-            border-color: var(--color-danger-border);
-        }
-
-        .alert-box.warning {
-            background-color: var(--color-warning-bg);
-            color: var(--color-warning);
-            border-color: var(--color-warning-border);
-        }
-
-        /* KPI METRIC CARDS MINIMALISTAS */
+        /* TARJETAS METRICAS (KPI) */
         .metric-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 14px;
-            margin-bottom: 22px;
-            flex-shrink: 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.75rem;
         }
 
         .metric-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 16px 18px;
-            box-shadow: var(--shadow-card);
-            transition: border-color 0.15s ease;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
         .metric-card:hover {
-            border-color: var(--border-medium);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
         }
 
         .metric-label {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-
-        .metric-value {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            font-variant-numeric: tabular-nums;
-            color: var(--text-primary);
-            line-height: 1.1;
-        }
-
-        .metric-hint {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        /* TARJETAS CONTENEDORAS DE TABLA */
-        .card-panel {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-card);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-header-bar {
-            padding: 14px 20px;
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-
-        .card-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-body-scroll {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        /* TABLAS MODERNAS: NINGÚN ELEMENTO ESCONDIDO */
-        table.data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13.5px;
-            text-align: left;
-        }
-
-        table.data-table thead {
-            background-color: var(--bg-subtle);
-        }
-
-        table.data-table th {
-            color: var(--text-secondary);
-            font-size: 11.5px;
+            font-size: 0.78rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.04em;
-            padding: 12px 18px;
-            border-bottom: 1px solid var(--border-subtle);
+            color: #64748b;
+            margin-bottom: 0.35rem;
+        }
+
+        .metric-value {
+            font-size: 1.85rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            line-height: 1.1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .metric-hint {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 0.35rem;
+        }
+
+        /* PANEL / CARDS */
+        .card-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+        }
+
+        .card-header-bar {
+            padding: 1rem 1.25rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .card-body-scroll {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        /* TABLAS DE DATOS */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
             white-space: nowrap;
         }
 
-        table.data-table td {
-            padding: 13px 18px;
+        .data-table td {
+            padding: 0.85rem 1rem;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: middle;
-            color: var(--text-primary);
+            color: #0f172a;
         }
 
-        table.data-table tbody tr {
-            transition: background-color 0.12s ease;
-        }
-
-        table.data-table tbody tr:hover {
+        .data-table tr:hover td {
             background-color: #f8fafc;
         }
 
-        table.data-table tbody tr:last-child td {
+        .data-table tr:last-child td {
             border-bottom: none;
         }
 
-        .mono {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 12.5px;
-            font-variant-numeric: tabular-nums;
-            color: #334155;
-        }
-
-        /* PÍLDORAS DE ESTADO CON PUNTO DE COLOR (MINIMALISTAS) */
+        /* STATUS PILLS & BADGES */
         .status-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 3px 10px;
-            font-size: 12px;
-            font-weight: 500;
-            border-radius: var(--radius-pill);
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            line-height: 1;
             white-space: nowrap;
         }
 
@@ -602,536 +285,458 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
+            background-color: currentColor;
+            display: inline-block;
         }
 
         .status-pill.success {
             background-color: #ecfdf5;
-            color: #065f46;
+            color: #059669;
+            border: 1px solid #a7f3d0;
         }
-        .status-pill.success .status-dot { background-color: #10b981; }
-
-        .status-pill.warning {
-            background-color: #fffbeb;
-            color: #92400e;
-        }
-        .status-pill.warning .status-dot { background-color: #f59e0b; }
-
-        .status-pill.danger {
-            background-color: #fef2f2;
-            color: #991b1b;
-        }
-        .status-pill.danger .status-dot { background-color: #ef4444; }
 
         .status-pill.info {
             background-color: #eff6ff;
-            color: #1e40af;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
         }
-        .status-pill.info .status-dot { background-color: #3b82f6; }
+
+        .status-pill.warning {
+            background-color: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .status-pill.danger {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
 
         .status-pill.neutral {
             background-color: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+        }
+
+        .badge-neutral {
+            background-color: #f1f5f9;
             color: #475569;
-        }
-        .status-pill.neutral .status-dot { background-color: #94a3b8; }
-
-        /* Legacy badge support */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 3px 8px;
-            font-size: 11.5px;
+            border: 1px solid #e2e8f0;
             font-weight: 500;
-            border-radius: var(--radius-sm);
-            white-space: nowrap;
-        }
-        .badge-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-        .badge-warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
-        .badge-danger { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-        .badge-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
-        .badge-neutral { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-
-        /* BOTONES MINIMALISTAS */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 7px 14px;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: var(--radius-md);
-            text-decoration: none;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.15s ease;
-            white-space: nowrap;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
         }
 
-        .btn-primary {
-            background-color: #0f172a;
-            color: #ffffff;
-            border-color: #0f172a;
-        }
-
-        .btn-primary:hover {
-            background-color: #1e293b;
-            border-color: #1e293b;
-        }
-
-        .btn-brand {
-            background-color: var(--color-primary);
-            color: #ffffff;
-            border-color: var(--color-primary);
-        }
-
-        .btn-brand:hover {
-            background-color: var(--color-primary-hover);
-            border-color: var(--color-primary-hover);
-        }
-
-        .btn-secondary {
-            background-color: #ffffff;
-            color: #0f172a;
-            border-color: var(--border-medium);
-        }
-
-        .btn-secondary:hover {
-            background-color: #f8fafc;
-            border-color: #94a3b8;
-        }
-
-        .btn-danger {
+        .badge-danger {
             background-color: #fef2f2;
-            color: #b91c1c;
-            border-color: #fecaca;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
         }
 
-        .btn-danger:hover {
-            background-color: #fee2e2;
-            border-color: #fca5a5;
+        /* TOOLBAR DE FILTROS */
+        .filter-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
         }
 
-        .btn-success {
-            background-color: #ecfdf5;
-            color: #065f46;
-            border-color: #a7f3d0;
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            align-items: center;
         }
 
-        .btn-success:hover {
-            background-color: #d1fae5;
+        .filter-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #64748b;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.15s ease;
         }
 
-        .btn-sm {
-            padding: 4px 10px;
-            font-size: 12px;
-            border-radius: var(--radius-sm);
+        .filter-pill:hover {
+            color: #0f172a;
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
         }
 
-        /* FORMULARIOS Y CONTROLES ERGONÓMICOS */
+        .filter-pill.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+            font-weight: 600;
+        }
+
+        /* FORMULARIOS */
         .form-card {
             background: #ffffff;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 24px 28px;
-            box-shadow: var(--shadow-card);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px 20px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.15rem;
+            margin-bottom: 1rem;
         }
 
         .form-grid.grid-3 {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         }
 
         .form-group.full {
             grid-column: 1 / -1;
         }
 
-        label.form-label {
-            font-size: 12.5px;
+        .form-label {
+            font-size: 0.82rem;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: #334155;
+            margin-bottom: 0.35rem;
+            display: block;
         }
 
-        input.form-control, select.form-control, textarea.form-control {
-            width: 100%;
-            padding: 8px 12px;
-            font-size: 13.5px;
-            border: 1px solid var(--border-medium);
+        .form-control, .form-select {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            color: #0f172a;
             background-color: #ffffff;
-            color: var(--text-primary);
-            border-radius: var(--radius-md);
-            outline: none;
-            font-family: inherit;
             transition: border-color 0.15s ease, box-shadow 0.15s ease;
         }
 
-        input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        .form-control:focus, .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            outline: none;
         }
 
-        /* TOOLBAR DE FILTROS MINIMALISTA */
-        .filter-toolbar {
+        /* BOTONES BOOTSTRAP PERSONALIZADOS */
+        .btn-brand {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: 1px solid #2563eb;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-brand:hover {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+            color: #ffffff;
+        }
+
+        /* CAJA DE FIRMA DIGITAL */
+        .signature-container {
+            background: #ffffff;
+            border: 1px dashed #94a3b8;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #signatureCanvas {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        /* ALERTAS DJANGO */
+        .alert-box {
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.88rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-shrink: 0;
-            background: #ffffff;
-            padding: 8px 14px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-xs);
-            flex-wrap: wrap;
+            border: 1px solid transparent;
         }
 
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+        .alert-box.success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border-color: #a7f3d0;
         }
 
-        .filter-pill {
-            padding: 5px 12px;
-            font-size: 12.5px;
-            font-weight: 500;
-            border-radius: var(--radius-pill);
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.12s ease;
+        .alert-box.error {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border-color: #fecaca;
         }
 
-        .filter-pill:hover {
-            background-color: #f1f5f9;
-            color: var(--text-primary);
+        .alert-box.warning {
+            background-color: #fffbeb;
+            color: #92400e;
+            border-color: #fde68a;
         }
 
-        .filter-pill.active {
-            background-color: #0f172a;
-            color: #ffffff;
-            font-weight: 600;
+        .alert-box.info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border-color: #bfdbfe;
         }
 
         /* MODALES */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.5);
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(2px);
+            z-index: 1050;
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            padding: 1rem;
         }
 
         .modal-card {
             background: #ffffff;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-modal);
-            width: 90%;
-            max-width: 580px;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            animation: modalFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: modalFadeIn 0.2s ease-out;
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.97) translateY(6px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .modal-header {
-            padding: 14px 20px;
-            border-bottom: 1px solid var(--border-subtle);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #f8fafc;
-        }
-
-        .modal-title {
-            font-size: 14px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #0f172a;
         }
 
         .modal-close-btn {
             background: transparent;
             border: none;
-            font-size: 18px;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: #64748b;
             cursor: pointer;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: var(--radius-sm);
         }
 
         .modal-close-btn:hover {
-            background-color: var(--border-subtle);
-            color: var(--text-primary);
+            color: #0f172a;
         }
 
         .modal-body {
-            padding: 20px;
-            overflow-y: auto;
+            padding: 1.25rem;
         }
 
-        /* CANVAS DE FIRMA DIGITAL */
-        .signature-container {
-            border: 1px solid var(--border-medium);
-            border-radius: var(--radius-md);
-            background-color: #ffffff;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-start;
-        }
-
-        canvas#signatureCanvas {
-            background-color: #ffffff;
-            border: 1.5px dashed var(--border-medium);
-            border-radius: var(--radius-sm);
-            cursor: crosshair;
-            touch-action: none;
-        }
-
-        /* PIE DE PÁGINA MINIMALISTA */
+        /* FOOTER INFERIOR */
         footer.bottom-footer {
-            border-top: 1px solid var(--border-subtle);
             background-color: #ffffff;
-            padding: 14px 28px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            color: var(--text-secondary);
-            flex-shrink: 0;
+            border-top: 1px solid #e2e8f0;
+            padding: 1.25rem 1.5rem;
             margin-top: auto;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #64748b;
         }
 
         .student-meta {
-            font-weight: 600;
-            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #334155;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
         }
 
         .system-meta {
-            color: var(--text-muted);
-            font-size: 11.5px;
+            color: #94a3b8;
+            font-size: 0.75rem;
         }
 
-        /* SCROLLBAR MINIMALISTA */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-variant-numeric: tabular-nums;
         }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header class="top-header">
-        <div class="header-left-group">
-            {% if request.user.is_authenticated %}
-            <button id="sidebarToggle" class="btn-sidebar-toggle" aria-label="Abrir menú" title="Abrir menú de navegación">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-                <span>Menú</span>
-            </button>
-            {% endif %}
-            <div class="brand-block">
-                <span class="brand-badge-logo">BC</span>
-                <span class="brand-title">BUILDCORP</span>
-                <span class="brand-sub">Control de Herramientas y Obras</span>
+    <!-- BARRA SUPERIOR NAVBAR CON BOOTSTRAP 5 -->
+    <nav class="navbar navbar-expand navbar-dark navbar-buildcorp sticky-top">
+        <div class="container-fluid px-3 px-lg-4">
+            <div class="d-flex align-items-center gap-3">
+                {% if request.user.is_authenticated %}
+                <button class="btn btn-outline-light btn-sm d-flex align-items-center gap-2 border-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarDrawer" aria-controls="sidebarDrawer" title="Abrir menú de navegación">
+                    <i class="bi bi-list fs-5"></i>
+                    <span class="d-none d-sm-inline fw-semibold">Menú</span>
+                </button>
+                {% endif %}
+
+                <a class="navbar-brand d-flex align-items-center gap-2 m-0 text-decoration-none" href="{% url 'dashboard' %}">
+                    <span class="brand-badge-logo">BC</span>
+                    <span class="fw-bold tracking-tight text-white fs-6">BUILDCORP</span>
+                    <span class="text-secondary small d-none d-md-inline ms-2 border-start ps-2 border-secondary text-truncate">Control Central de Activos y Obras</span>
+                </a>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                {% if request.user.is_authenticated %}
+                    <div class="d-none d-md-flex align-items-center gap-2 bg-dark bg-opacity-50 text-light border border-secondary px-3 py-1 rounded-pill small">
+                        <span class="p-1 bg-success rounded-circle"></span>
+                        <span class="fw-semibold">{{ request.user.username }}</span>
+                        <span class="text-secondary">&bull;</span>
+                        <span class="text-secondary text-uppercase" style="font-size: 0.72rem;">{{ request.user.groups.first.name|default:"ADMINISTRADOR" }}</span>
+                    </div>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span class="d-none d-sm-inline">Salir</span>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                        <i class="bi bi-person-fill"></i>
+                        <span>Iniciar Sesión</span>
+                    </a>
+                {% endif %}
             </div>
         </div>
-        <div class="user-block">
-            {% if request.user.is_authenticated %}
-                <span class="user-badge">
-                    <span class="user-badge-dot"></span>
-                    {{ request.user.username }} &bull; {{ request.user.groups.first.name|default:"ADMINISTRADOR" }}
-                </span>
-                <a href="{% url 'logout' %}" class="btn-logout">Cerrar Sesión</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn-logout">Iniciar Sesión</a>
-            {% endif %}
-        </div>
-    </header>
+    </nav>
 
     {% if request.user.is_authenticated %}
-    <!-- TELÓN DE FONDO (BACKDROP) -->
-    <div id="sidebarBackdrop" class="sidebar-backdrop" aria-hidden="true"></div>
-
-    <!-- MENÚ VERTICAL DESPLEGABLE DESDE LA IZQUIERDA (DRAWER) -->
-    <aside id="sidebarDrawer" class="sidebar-drawer" aria-label="Navegación principal" aria-hidden="true">
-        <div class="sidebar-header">
-            <div class="sidebar-brand-group">
+    <!-- OFFCANVAS BOOTSTRAP: MENÚ VERTICAL DESPLEGABLE DESDE LA IZQUIERDA -->
+    <div class="offcanvas offcanvas-start offcanvas-buildcorp" tabindex="-1" id="sidebarDrawer" aria-labelledby="sidebarDrawerLabel">
+        <div class="offcanvas-header">
+            <div class="d-flex align-items-center gap-2">
                 <span class="brand-badge-logo">BC</span>
                 <div>
-                    <div class="sidebar-brand-title">BUILDCORP</div>
-                    <div class="sidebar-brand-sub">Navegación del Sistema</div>
+                    <h5 class="offcanvas-title text-white fw-bold mb-0 fs-6" id="sidebarDrawerLabel">BUILDCORP</h5>
+                    <div class="small text-secondary" style="font-size: 0.75rem;">Navegación del Sistema</div>
                 </div>
             </div>
-            <button id="sidebarClose" class="btn-sidebar-close" aria-label="Cerrar menú" title="Cerrar menú">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
 
-        <div class="sidebar-content">
-            <div class="sidebar-section-heading">Módulos de Gestión</div>
-            <ul class="sidebar-nav-list">
-                <li>
-                    <a href="{% url 'dashboard' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="9"></rect>
-                            <rect x="14" y="3" width="7" height="5"></rect>
-                            <rect x="14" y="12" width="7" height="9"></rect>
-                            <rect x="3" y="16" width="7" height="5"></rect>
-                        </svg>
-                        <span>Inicio / Tablero</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'herramientas' %}" class="sidebar-nav-link {% if 'herramienta' in request.resolver_match.url_name %}active{% endif %}">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                        </svg>
-                        <span>Herramientas</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'obras' %}" class="sidebar-nav-link {% if 'obra' in request.resolver_match.url_name %}active{% endif %}">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                        </svg>
-                        <span>Obras</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'prestamos' %}" class="sidebar-nav-link {% if 'prestamo' in request.resolver_match.url_name %}active{% endif %}">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                        <span>Préstamos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'mantenimientos' %}" class="sidebar-nav-link {% if 'mantenimiento' in request.resolver_match.url_name %}active{% endif %}">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                        </svg>
-                        <span>Mantenimiento</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'contratistas' %}" class="sidebar-nav-link {% if 'contratista' in request.resolver_match.url_name %}active{% endif %}">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        <span>Contratistas</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'auditoria' %}" class="sidebar-nav-link {% if 'auditoria' in request.resolver_match.url_name %}active{% endif %}">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <polyline points="9 12 11 14 15 10"></polyline>
-                        </svg>
-                        <span>Historial</span>
-                    </a>
-                </li>
-            </ul>
+        <div class="offcanvas-body d-flex flex-column p-3">
+            <div class="offcanvas-nav-heading">Módulos de Gestión</div>
+            <nav class="nav nav-pills flex-column gap-1">
+                <a href="{% url 'dashboard' %}" class="offcanvas-nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Inicio / Tablero</span>
+                </a>
+                <a href="{% url 'herramientas' %}" class="offcanvas-nav-link {% if 'herramienta' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-tools"></i>
+                    <span>Herramientas</span>
+                </a>
+                <a href="{% url 'obras' %}" class="offcanvas-nav-link {% if 'obra' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-buildings"></i>
+                    <span>Obras / Faenas</span>
+                </a>
+                <a href="{% url 'prestamos' %}" class="offcanvas-nav-link {% if 'prestamo' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Préstamos y Firmas</span>
+                </a>
+                <a href="{% url 'mantenimientos' %}" class="offcanvas-nav-link {% if 'mantenimiento' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-wrench-adjustable"></i>
+                    <span>Mantenimiento</span>
+                </a>
+                <a href="{% url 'contratistas' %}" class="offcanvas-nav-link {% if 'contratista' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-people"></i>
+                    <span>Contratistas</span>
+                </a>
+                <a href="{% url 'auditoria' %}" class="offcanvas-nav-link {% if 'auditoria' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Historial y Auditoría</span>
+                </a>
+            </nav>
 
-            <div class="sidebar-section-heading">Herramientas del Sistema</div>
-            <ul class="sidebar-nav-list">
-                <li>
-                    <a href="/api/docs/" target="_blank" class="sidebar-nav-link external">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="16 18 22 12 16 6"></polyline>
-                            <polyline points="8 6 2 12 8 18"></polyline>
-                        </svg>
-                        <span>API Swagger</span>
-                        <span class="external-badge">Docs ↗</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/" target="_blank" class="sidebar-nav-link external">
-                        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                        </svg>
-                        <span>Django Admin</span>
-                        <span class="external-badge">Admin ↗</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+            <div class="offcanvas-nav-heading mt-4">Herramientas del Sistema</div>
+            <nav class="nav nav-pills flex-column gap-1">
+                <a href="/api/docs/" target="_blank" class="offcanvas-nav-link text-secondary">
+                    <i class="bi bi-filetype-json"></i>
+                    <span>API Swagger</span>
+                    <span class="badge bg-light text-secondary border ms-auto small">Docs ↗</span>
+                </a>
+                <a href="/admin/" target="_blank" class="offcanvas-nav-link text-secondary">
+                    <i class="bi bi-sliders"></i>
+                    <span>Django Admin</span>
+                    <span class="badge bg-light text-secondary border ms-auto small">Admin ↗</span>
+                </a>
+            </nav>
 
-        <div class="sidebar-footer">
-            <div class="sidebar-user-details">
-                <span class="user-badge-dot"></span>
-                <div>
-                    <div class="sidebar-user-name">{{ request.user.username }}</div>
-                    <div class="sidebar-user-role">{{ request.user.groups.first.name|default:"ADMINISTRADOR" }}</div>
+            <div class="mt-auto pt-3">
+                <div class="offcanvas-buildcorp-footer rounded-3 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2 overflow-hidden">
+                        <span class="p-1 bg-success rounded-circle flex-shrink-0"></span>
+                        <div class="text-truncate">
+                            <div class="fw-semibold text-slate-900 small text-truncate">{{ request.user.username }}</div>
+                            <div class="text-secondary text-uppercase" style="font-size: 0.7rem;">{{ request.user.groups.first.name|default:"ADMINISTRADOR" }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger py-1 px-2" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
                 </div>
             </div>
-            <a href="{% url 'logout' %}" class="btn-logout" style="padding: 4px 8px;">Salir</a>
         </div>
-    </aside>
+    </div>
     {% endif %}
 
+    <!-- CONTENEDOR PRINCIPAL ERGONÓMICO -->
     <main class="main-viewport">
         {% if messages %}
-        <div class="alerts-wrapper">
+        <div class="mb-3">
             {% for message in messages %}
-                <div class="alert-box {% if message.tags %}{{ message.tags }}{% endif %}">
-                    <span>{{ message }}</span>
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'warning' %}warning{% elif message.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show shadow-sm" role="alert">
+                    <div class="d-flex align-items-center gap-2">
+                        {% if message.tags == 'success' %}
+                            <i class="bi bi-check-circle-fill fs-5"></i>
+                        {% elif message.tags == 'error' %}
+                            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="bi bi-exclamation-circle-fill fs-5"></i>
+                        {% else %}
+                            <i class="bi bi-info-circle-fill fs-5"></i>
+                        {% endif %}
+                        <span>{{ message }}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
                 </div>
             {% endfor %}
         </div>
@@ -1140,57 +745,19 @@
         {% block content %}{% endblock %}
     </main>
 
+    <!-- FOOTER INFERIOR -->
     <footer class="bottom-footer">
         <div class="student-meta">
             RODRIGO NICOLÁS PEÑA SAGREDO &bull; EVALUACIÓN PARCIAL N°3 BACKEND &bull; INACAP 2026
         </div>
         <div class="system-meta">
-            BuildCorp Enterprise v1.0 &bull; PostgreSQL Nativo &bull; Auditoría ISO 27001/9001 &bull; AWS EC2 Ready
+            BuildCorp Enterprise v1.0 &bull; PostgreSQL Nativo &bull; Auditoría ISO 27001/9001 &bull; Bootstrap 5 UI
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const closeBtn = document.getElementById('sidebarClose');
-            const drawer = document.getElementById('sidebarDrawer');
-            const backdrop = document.getElementById('sidebarBackdrop');
+    <!-- Bootstrap 5.3.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-            function openSidebar() {
-                if (!drawer || !backdrop) return;
-                drawer.classList.add('active');
-                backdrop.classList.add('active');
-                drawer.setAttribute('aria-hidden', 'false');
-                backdrop.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeSidebar() {
-                if (!drawer || !backdrop) return;
-                drawer.classList.remove('active');
-                backdrop.classList.remove('active');
-                drawer.setAttribute('aria-hidden', 'true');
-                backdrop.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-            }
-
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', openSidebar);
-            }
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeSidebar);
-            }
-            if (backdrop) {
-                backdrop.addEventListener('click', closeSidebar);
-            }
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && drawer && drawer.classList.contains('active')) {
-                    closeSidebar();
-                }
-            });
-        });
-    </script>
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>

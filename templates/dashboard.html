@@ -3,149 +3,163 @@
 {% block title %}Panel Principal — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="page-header-bar">
-    <div class="page-title-group">
-        <h1 class="page-heading">Panel Principal</h1>
-        <p class="page-caption">Resumen en vivo de tus herramientas, préstamos activos y revisiones técnicas pendientes.</p>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">Panel Principal</h1>
+        <p class="text-secondary small mb-0">Resumen en vivo de tus herramientas, préstamos activos y revisiones técnicas pendientes.</p>
     </div>
     <div>
-        <a href="{% url 'nuevo_prestamo' %}" class="btn btn-primary">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Prestar Herramienta
+        <a href="{% url 'nuevo_prestamo' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 py-2 fw-semibold shadow-sm">
+            <i class="bi bi-plus-lg"></i>
+            <span>Prestar Herramienta</span>
         </a>
     </div>
 </div>
 
-<div class="metric-grid">
-    <div class="metric-card">
-        <div class="metric-label">Total Herramientas</div>
-        <div class="metric-value">{{ total_activos }}</div>
-        <div class="metric-hint">Herramientas registradas</div>
+<!-- METRICAS KPI CON BOOTSTRAP GRID -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
+            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Total Herramientas</div>
+            <div class="h3 fw-bold text-dark mb-1 mono">{{ total_activos }}</div>
+            <div class="text-secondary small" style="font-size: 0.75rem;">Herramientas registradas</div>
+        </div>
     </div>
-    <div class="metric-card">
-        <div class="metric-label">Disponibles</div>
-        <div class="metric-value" style="color: var(--color-success);">{{ disponibles }}</div>
-        <div class="metric-hint">Listas para prestar</div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
+            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Disponibles</div>
+            <div class="h3 fw-bold text-success mb-1 mono">{{ disponibles }}</div>
+            <div class="text-secondary small" style="font-size: 0.75rem;">Listas para prestar</div>
+        </div>
     </div>
-    <div class="metric-card">
-        <div class="metric-label">En Obras</div>
-        <div class="metric-value" style="color: var(--color-primary);">{{ en_uso }}</div>
-        <div class="metric-hint">En uso en terreno</div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
+            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">En Obras</div>
+            <div class="h3 fw-bold text-primary mb-1 mono">{{ en_uso }}</div>
+            <div class="text-secondary small" style="font-size: 0.75rem;">En uso en terreno</div>
+        </div>
     </div>
-    <div class="metric-card">
-        <div class="metric-label">En Mantenimiento</div>
-        <div class="metric-value" style="color: var(--color-warning);">{{ mantenimiento }}</div>
-        <div class="metric-hint">En revisión técnica</div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
+            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">En Mantenimiento</div>
+            <div class="h3 fw-bold text-warning mb-1 mono">{{ mantenimiento }}</div>
+            <div class="text-secondary small" style="font-size: 0.75rem;">En revisión técnica</div>
+        </div>
     </div>
-    <div class="metric-card">
-        <div class="metric-label">Con Atraso</div>
-        <div class="metric-value" style="color: var(--color-danger);">{{ contratistas_bloqueados }}</div>
-        <div class="metric-hint">Contratistas bloqueados</div>
+    <div class="col-12 col-md-4 col-xl">
+        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
+            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Con Atraso</div>
+            <div class="h3 fw-bold text-danger mb-1 mono">{{ contratistas_bloqueados }}</div>
+            <div class="text-secondary small" style="font-size: 0.75rem;">Contratistas con atraso</div>
+        </div>
     </div>
 </div>
 
 {% if alertas_morosidad %}
-<div class="alert-box error" style="margin-bottom: 20px; padding: 12px 18px;">
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <span class="status-pill danger" style="font-weight: 700;">
-            <span class="status-dot"></span>ALERTA DE ATRASO
+<!-- ALERTA DE ATRASOS -->
+<div class="alert alert-danger border-danger-subtle d-flex flex-wrap justify-content-between align-items-center shadow-sm rounded-3 p-3 mb-4" role="alert">
+    <div class="d-flex align-items-center gap-3">
+        <span class="badge bg-danger text-white px-2 py-1 fw-bold d-flex align-items-center gap-1">
+            <i class="bi bi-exclamation-triangle-fill"></i> ALERTA DE ATRASO
         </span>
-        <div style="font-size: 13px; color: #7f1d1d;">
+        <div class="small text-danger-emphasis">
             Hay <strong>{{ alertas_morosidad.count }}</strong> contratista(s) con devoluciones vencidas. No pueden pedir más herramientas hasta devolverlas.
         </div>
     </div>
-    <a href="{% url 'prestamos' %}?estado=VENCIDO_MOROSO" class="btn btn-secondary btn-sm" style="color: var(--color-danger); border-color: var(--color-danger-border);">
+    <a href="{% url 'prestamos' %}?estado=VENCIDO_MOROSO" class="btn btn-outline-danger btn-sm fw-semibold">
         Ver Atrasados &rarr;
     </a>
 </div>
 {% endif %}
 
-<div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-bottom: 24px;">
+<div class="row g-4 mb-4">
     <!-- COLUMNA IZQUIERDA: ÚLTIMOS PRÉSTAMOS -->
-    <div class="card-panel">
-        <div class="card-header-bar">
-            <span class="card-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Últimos Préstamos
-            </span>
-            <a href="{% url 'prestamos' %}" class="btn btn-secondary btn-sm">Ver Todos &rarr;</a>
-        </div>
-        <div class="card-body-scroll">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>N° Préstamo</th>
-                        <th>Contratista y Obra</th>
-                        <th>Fecha Devolución</th>
-                        <th>Estado</th>
-                        <th>Firma</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in ultimos_prestamos %}
-                    <tr>
-                        <td class="mono" style="font-weight: 700; color: var(--color-primary); font-size: 13px;">{{ p.codigo_prestamo }}</td>
-                        <td>
-                            <div style="font-weight: 600; font-size: 13.5px;">{{ p.contratista.razon_social }}</div>
-                            <div style="font-size: 12px; color: var(--text-muted);">{{ p.obra.nombre }}</div>
-                        </td>
-                        <td class="mono" style="font-size: 13px; font-weight: 600;">{{ p.fecha_pactada_devolucion|date:"d/m/Y" }}</td>
-                        <td>
-                            {% if p.estado == 'ACTIVO' %}
-                                <span class="status-pill info"><span class="status-dot"></span>En préstamo</span>
-                            {% elif p.estado == 'VENCIDO_MOROSO' %}
-                                <span class="status-pill danger"><span class="status-dot"></span>Atrasado</span>
-                            {% else %}
-                                <span class="status-pill neutral"><span class="status-dot"></span>Devuelto</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if p.firma_digital_entrega %}
-                                <span class="status-pill success" title="Firma registrada"><span class="status-dot"></span>Firmado</span>
-                            {% else %}
-                                <span class="status-pill neutral"><span class="status-dot"></span>Sin firma</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 32px;">No hay préstamos recientes.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="col-12 col-xl-7">
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white h-100">
+            <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-dark d-flex align-items-center gap-2">
+                    <i class="bi bi-journal-text text-primary fs-5"></i>
+                    Últimos Préstamos
+                </span>
+                <a href="{% url 'prestamos' %}" class="btn btn-outline-secondary btn-sm">Ver Todos &rarr;</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">N° Préstamo</th>
+                            <th>Contratista y Obra</th>
+                            <th>Fecha Devolución</th>
+                            <th>Estado</th>
+                            <th class="pe-4">Firma</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in ultimos_prestamos %}
+                        <tr>
+                            <td class="ps-4 mono fw-bold text-primary small">{{ p.codigo_prestamo }}</td>
+                            <td>
+                                <div class="fw-semibold text-dark small">{{ p.contratista.razon_social }}</div>
+                                <div class="text-secondary small">{{ p.obra.nombre }}</div>
+                            </td>
+                            <td class="mono small fw-semibold text-dark">{{ p.fecha_pactada_devolucion|date:"d/m/Y" }}</td>
+                            <td>
+                                {% if p.estado == 'ACTIVO' %}
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-clock me-1"></i>En préstamo</span>
+                                {% elif p.estado == 'VENCIDO_MOROSO' %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="bi bi-exclamation-circle me-1"></i>Atrasado</span>
+                                {% else %}
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="bi bi-check2 me-1"></i>Devuelto</span>
+                                {% endif %}
+                            </td>
+                            <td class="pe-4">
+                                {% if p.firma_digital_entrega %}
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle" title="Firma registrada"><i class="bi bi-pen-fill me-1"></i>Firmado</span>
+                                {% else %}
+                                    <span class="badge bg-light text-secondary border">Sin firma</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-secondary py-4 small">No hay préstamos recientes registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <!-- COLUMNA DERECHA: ALERTAS Y MANTENIMIENTO -->
-    <div style="display: flex; flex-direction: column; gap: 20px;">
+    <div class="col-12 col-xl-5 d-flex flex-column gap-4">
         {% if alertas_morosidad %}
-        <div class="card-panel">
-            <div class="card-header-bar" style="background-color: var(--color-danger-bg); border-bottom-color: var(--color-danger-border);">
-                <span class="card-title" style="color: var(--color-danger);">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white">
+            <div class="card-header bg-danger-subtle border-bottom border-danger-subtle py-3 px-4">
+                <span class="fw-bold text-danger d-flex align-items-center gap-2">
+                    <i class="bi bi-exclamation-octagon-fill"></i>
                     Préstamos Atrasados
                 </span>
             </div>
-            <div class="card-body-scroll">
-                <table class="data-table">
-                    <thead>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th>Contratista</th>
+                            <th class="ps-4">Contratista</th>
                             <th>Atraso</th>
-                            <th style="text-align: right;">Acción</th>
+                            <th class="pe-4 text-end">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for a in alertas_morosidad %}
                         <tr>
-                            <td>
-                                <div style="font-weight: 600; font-size: 13px;">{{ a.contratista.razon_social }}</div>
-                                <div class="mono" style="font-size: 11px; color: var(--text-muted);">{{ a.prestamo.codigo_prestamo }}</div>
+                            <td class="ps-4">
+                                <div class="fw-semibold text-dark small">{{ a.contratista.razon_social }}</div>
+                                <div class="mono text-secondary small">{{ a.prestamo.codigo_prestamo }}</div>
                             </td>
-                            <td class="mono" style="color: var(--color-danger); font-weight: 700; font-size: 13px;">+{{ a.dias_retraso }} días</td>
-                            <td style="text-align: right;">
-                                <a href="{% url 'devolucion_prestamo' a.prestamo.id %}" class="btn btn-brand btn-sm">Recibir</a>
+                            <td class="mono text-danger fw-bold small">+{{ a.dias_retraso }} días</td>
+                            <td class="pe-4 text-end">
+                                <a href="{% url 'devolucion_prestamo' a.prestamo.id %}" class="btn btn-primary btn-sm py-1 px-2 fw-semibold">Recibir</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -155,43 +169,43 @@
         </div>
         {% endif %}
 
-        <div class="card-panel">
-            <div class="card-header-bar">
-                <span class="card-title">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white">
+            <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-dark d-flex align-items-center gap-2">
+                    <i class="bi bi-wrench-adjustable text-warning fs-5"></i>
                     Mantenimientos y Revisiones
                 </span>
-                <a href="{% url 'mantenimientos' %}" class="btn btn-secondary btn-sm">Ver Todo &rarr;</a>
+                <a href="{% url 'mantenimientos' %}" class="btn btn-outline-secondary btn-sm">Ver Todo &rarr;</a>
             </div>
-            <div class="card-body-scroll">
-                <table class="data-table">
-                    <thead>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th>Herramienta / Orden</th>
-                            <th style="text-align: right;">Estado</th>
+                            <th class="ps-4">Herramienta / Orden</th>
+                            <th class="pe-4 text-end">Estado</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for m in proximos_mtos %}
                         <tr>
-                            <td>
-                                <div class="mono" style="font-weight: 700; color: var(--color-primary); font-size: 12.5px;">{{ m.codigo_orden }}</div>
-                                <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">{{ m.herramienta.nombre }}</div>
-                                <div class="mono" style="font-size: 11.5px; color: var(--text-muted);">Uso: {{ m.horas_al_momento }} hrs</div>
+                            <td class="ps-4">
+                                <div class="mono fw-bold text-primary small">{{ m.codigo_orden }}</div>
+                                <div class="fw-semibold text-dark small">{{ m.herramienta.nombre }}</div>
+                                <div class="mono text-secondary small">Uso: {{ m.horas_al_momento }} hrs</div>
                             </td>
-                            <td style="text-align: right;">
+                            <td class="pe-4 text-end">
                                 {% if m.estado == 'PROGRAMADO' %}
-                                    <span class="status-pill warning"><span class="status-dot"></span>Programado</span>
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"><i class="bi bi-hourglass-split me-1"></i>Programado</span>
                                 {% elif m.estado == 'EN_PROCESO' %}
-                                    <span class="status-pill info"><span class="status-dot"></span>En taller</span>
+                                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle"><i class="bi bi-gear-fill me-1"></i>En taller</span>
                                 {% else %}
-                                    <span class="status-pill success"><span class="status-dot"></span>Listo</span>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2 me-1"></i>Listo</span>
                                 {% endif %}
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 28px;">No hay revisiones pendientes.</td>
+                            <td colspan="2" class="text-center text-secondary py-4 small">No hay revisiones técnicas pendientes.</td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -3,27 +3,30 @@
 {% block title %}{% if editando %}Editar Herramienta: {{ herramienta.codigo_inventario }}{% else %}Nueva Herramienta{% endif %} — BuildCorp{% endblock %}
 
 {% block content %}
-<div style="max-width: 920px; margin: 0 auto; width: 100%;">
-    <div class="page-header-bar" style="margin-bottom: 18px;">
-        <div class="page-title-group">
-            <h1 class="page-heading">{% if editando %}Editar Herramienta: {{ herramienta.codigo_inventario }}{% else %}Agregar Nueva Herramienta{% endif %}</h1>
-            <p class="page-caption">Ingresa los datos básicos de la herramienta para mantener el inventario al día.</p>
+<div class="container-fluid px-0" style="max-width: 960px;">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">{% if editando %}Editar Herramienta: {{ herramienta.codigo_inventario }}{% else %}Nueva Herramienta{% endif %}</h1>
+            <p class="text-secondary small mb-0">Ingresa los datos técnicos y operativos para registrar el equipo en el inventario.</p>
         </div>
-        <a href="{% url 'herramientas' %}" class="btn btn-secondary">&larr; Volver a Herramientas</a>
+        <a href="{% url 'herramientas' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1">
+            <i class="bi bi-arrow-left"></i>
+            <span>Volver a Herramientas</span>
+        </a>
     </div>
 
-    <form method="POST" enctype="multipart/form-data" class="form-card" style="margin-bottom: 32px;">
+    <form method="POST" enctype="multipart/form-data" class="card border-0 shadow-sm rounded-3 p-4 bg-white mb-4">
         {% csrf_token %}
 
-        <div class="form-grid grid-3">
-            <div class="form-group">
-                <label class="form-label" for="codigo_inventario">Código de la herramienta *</label>
-                <input type="text" name="codigo_inventario" id="codigo_inventario" class="form-control mono" value="{{ herramienta.codigo_inventario|default:'' }}" placeholder="Ej: BC-DEM-006" required {% if editando %}readonly style="background: var(--bg-subtle);"{% endif %}>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="codigo_inventario">Código de Inventario *</label>
+                <input type="text" name="codigo_inventario" id="codigo_inventario" class="form-control mono" value="{{ herramienta.codigo_inventario|default:'' }}" placeholder="Ej: BC-DEM-006" required {% if editando %}readonly style="background-color: #f1f5f9;"{% endif %}>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="categoria">Categoría *</label>
-                <select name="categoria" id="categoria" class="form-control" required>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="categoria">Categoría *</label>
+                <select name="categoria" id="categoria" class="form-select" required>
                     <option value="">-- Elige una categoría --</option>
                     {% for cat in categorias %}
                         <option value="{{ cat.id }}" {% if herramienta.categoria_id == cat.id %}selected{% endif %}>
@@ -33,9 +36,9 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="estado">Estado inicial</label>
-                <select name="estado" id="estado" class="form-control">
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="estado">Estado Operativo</label>
+                <select name="estado" id="estado" class="form-select">
                     <option value="DISPONIBLE" {% if herramienta.estado == 'DISPONIBLE' %}selected{% endif %}>Disponible en bodega</option>
                     <option value="EN_USO" {% if herramienta.estado == 'EN_USO' %}selected{% endif %}>En uso en obra</option>
                     <option value="MANTENIMIENTO" {% if herramienta.estado == 'MANTENIMIENTO' %}selected{% endif %}>En mantenimiento</option>
@@ -43,64 +46,74 @@
                 </select>
             </div>
 
-            <div class="form-group full">
-                <label class="form-label" for="nombre">Nombre de la herramienta *</label>
+            <div class="col-12">
+                <label class="form-label small fw-semibold text-secondary" for="nombre">Nombre / Descripción de la Herramienta *</label>
                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ herramienta.nombre|default:'' }}" placeholder="Ej: Rotomartillo SDS Plus 800W con maleta" required>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="marca">Marca *</label>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="marca">Marca *</label>
                 <input type="text" name="marca" id="marca" class="form-control" value="{{ herramienta.marca|default:'' }}" placeholder="Ej: Bosch / Makita / DeWalt" required>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="modelo">Modelo *</label>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="modelo">Modelo *</label>
                 <input type="text" name="modelo" id="modelo" class="form-control" value="{{ herramienta.modelo|default:'' }}" placeholder="Ej: GBH 2-26 DRE" required>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="numero_serie">Número de serie</label>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="numero_serie">Número de Serie</label>
                 <input type="text" name="numero_serie" id="numero_serie" class="form-control mono" value="{{ herramienta.numero_serie|default:'' }}" placeholder="Ej: SN-49210-MK">
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="horas_uso_acumuladas">Horas de uso actuales</label>
-                <input type="number" name="horas_uso_acumuladas" id="horas_uso_acumuladas" class="form-control mono" value="{{ herramienta.horas_uso_acumuladas|default:0 }}" min="0" required>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="horas_uso_acumuladas">Horas de Uso Actuales</label>
+                <div class="input-group">
+                    <input type="number" name="horas_uso_acumuladas" id="horas_uso_acumuladas" class="form-control mono" value="{{ herramienta.horas_uso_acumuladas|default:0 }}" min="0" required>
+                    <span class="input-group-text small text-secondary">hrs</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="horas_proximo_mantenimiento">Horas límite para mantenimiento *</label>
-                <input type="number" name="horas_proximo_mantenimiento" id="horas_proximo_mantenimiento" class="form-control mono" value="{{ herramienta.horas_proximo_mantenimiento|default:100 }}" min="10" required>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="horas_proximo_mantenimiento">Límite para Mantenimiento *</label>
+                <div class="input-group">
+                    <input type="number" name="horas_proximo_mantenimiento" id="horas_proximo_mantenimiento" class="form-control mono" value="{{ herramienta.horas_proximo_mantenimiento|default:100 }}" min="10" required>
+                    <span class="input-group-text small text-secondary">hrs</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="valor_reposicion">Precio de reposición ($ CLP) *</label>
-                <input type="number" step="1000" name="valor_reposicion" id="valor_reposicion" class="form-control mono" value="{{ herramienta.valor_reposicion|default:0 }}" required>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold text-secondary" for="valor_reposicion">Valor de Reposición ($ CLP) *</label>
+                <div class="input-group">
+                    <span class="input-group-text small text-secondary">$</span>
+                    <input type="number" step="1000" name="valor_reposicion" id="valor_reposicion" class="form-control mono" value="{{ herramienta.valor_reposicion|default:0 }}" required>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="bodega_actual">Bodega o ubicación habitual</label>
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold text-secondary" for="bodega_actual">Bodega de Origen</label>
                 <input type="text" name="bodega_actual" id="bodega_actual" class="form-control" value="{{ herramienta.bodega_actual|default:'Bodega Central' }}" required>
             </div>
 
-            <div class="form-group" style="grid-column: span 2;">
-                <label class="form-label" for="imagen_url">URL de imagen (opcional)</label>
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold text-secondary" for="imagen_url">URL de Imagen (opcional)</label>
                 <input type="text" name="imagen_url" id="imagen_url" class="form-control mono" value="{{ herramienta.imagen_url|default:'' }}" placeholder="/static/images/herramientas/default_tool.svg">
             </div>
 
-            <div class="form-group full">
-                <label class="form-label" for="imagen">Foto de la herramienta (opcional)</label>
+            <div class="col-12">
+                <label class="form-label small fw-semibold text-secondary" for="imagen">Archivo de Imagen / Fotografía (opcional)</label>
                 <input type="file" name="imagen" id="imagen" class="form-control" accept="image/*">
                 {% if herramienta.imagen %}
-                    <div style="font-size: 12px; margin-top: 6px; color: var(--color-primary);">Foto guardada: <a href="{{ herramienta.imagen.url }}" target="_blank">{{ herramienta.imagen.name }}</a></div>
+                    <div class="small mt-1 text-primary">Foto guardada actualmente: <a href="{{ herramienta.imagen.url }}" target="_blank" class="fw-semibold">{{ herramienta.imagen.name }}</a></div>
                 {% endif %}
             </div>
         </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
-            <a href="{% url 'herramientas' %}" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">
-                {% if editando %}Guardar Cambios{% else %}Guardar Herramienta{% endif %}
+        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <a href="{% url 'herramientas' %}" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 fw-semibold">
+                <i class="bi bi-check2"></i>
+                <span>{% if editando %}Actualizar Herramienta{% else %}Guardar Herramienta{% endif %}</span>
             </button>
         </div>
     </form>
