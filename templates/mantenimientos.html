@@ -3,33 +3,33 @@
 {% block title %}Mantenimiento — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 gap-3 border-bottom pb-3">
     <div>
-        <h1 class="h3 fw-bold text-dark mb-1">Mantenimiento y Reparaciones</h1>
-        <p class="text-secondary small mb-0">Control de órdenes técnicas, revisiones preventivas, costos y reincorporación de equipos.</p>
+        <h1 class="page-heading">Mantenimiento y Taller Mecánico</h1>
+        <p class="page-caption">Programación de servicios preventivos, reparaciones por avería técnica y registro de costos de mantenimiento.</p>
     </div>
-    <div class="d-flex gap-2">
-        <a href="{% url 'exportar_mantenimientos_csv' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 fw-medium shadow-sm">
+    <div class="d-flex align-items-center gap-2">
+        <a href="{% url 'exportar_mantenimientos_csv' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 py-2 px-3">
             <i class="bi bi-file-earmark-excel"></i>
-            <span>Descargar Excel</span>
+            <span>Exportar Excel</span>
         </a>
-        <a href="{% url 'mantenimientos_crear' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold shadow-sm">
+        <a href="{% url 'mantenimientos_crear' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 py-2 px-3 shadow-sm">
             <i class="bi bi-plus-lg"></i>
             <span>Nuevo Mantenimiento</span>
         </a>
     </div>
 </div>
 
-<div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">
+<div class="card-panel mb-4">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+            <thead>
                 <tr>
-                    <th class="ps-4" style="min-width: 260px;">Herramienta y Orden</th>
-                    <th>Tipo y Técnico</th>
-                    <th>Horas y Fecha</th>
+                    <th class="ps-4" style="min-width: 270px;">Herramienta & Orden</th>
+                    <th>Tipo y Responsable</th>
+                    <th>Horómetro y Fecha</th>
                     <th>Estado y Costo</th>
-                    <th class="pe-4 text-end" style="width: 270px;">Acciones</th>
+                    <th class="pe-4 text-end" style="width: 280px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,39 +37,43 @@
                 <tr>
                     <td class="ps-4">
                         <div class="d-flex align-items-center gap-3">
-                            <img src="{{ m.herramienta.get_imagen_url }}" alt="{{ m.herramienta.nombre }}" class="rounded-2 border p-1 bg-white flex-shrink-0" style="width: 44px; height: 44px; object-fit: contain;">
+                            <div class="rounded-3 border p-1 bg-white flex-shrink-0 shadow-xs" style="width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ m.herramienta.get_imagen_url }}" alt="{{ m.herramienta.nombre }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
                             <div>
                                 <div class="mono fw-bold text-primary small">{{ m.codigo_orden }}</div>
-                                <div class="fw-semibold text-dark small">{{ m.herramienta.nombre }}</div>
-                                <div class="mono text-muted small" style="font-size: 0.75rem;">{{ m.herramienta.codigo_inventario }} &bull; {{ m.herramienta.marca }}</div>
+                                <div class="fw-bold text-dark small">{{ m.herramienta.nombre }}</div>
+                                <div class="mono text-muted small" style="font-size: 0.74rem;">{{ m.herramienta.codigo_inventario }} &bull; {{ m.herramienta.marca }}</div>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <span class="badge bg-light text-secondary border small">{{ m.get_tipo_display }}</span>
-                        <div class="text-secondary small mt-1" style="font-size: 0.75rem;"><i class="bi bi-person me-1"></i>{{ m.tecnico_responsable }}</div>
+                        <span class="badge bg-light text-dark border small fw-semibold">{{ m.get_tipo_display }}</span>
+                        <div class="text-secondary small d-flex align-items-center gap-1 mt-1" style="font-size: 0.74rem;">
+                            <i class="bi bi-person-gear text-muted"></i>{{ m.tecnico_responsable }}
+                        </div>
                     </td>
                     <td>
                         <div class="mono small fw-bold text-dark">{{ m.horas_al_momento }} hrs</div>
-                        <div class="text-secondary small mt-1" style="font-size: 0.75rem;">Fecha: {{ m.fecha_programada|date:"d/m/Y" }}</div>
+                        <div class="text-muted small mt-1" style="font-size: 0.72rem;">Fecha: {{ m.fecha_programada|date:"d/m/Y" }}</div>
                     </td>
                     <td>
                         <div>
                             {% if m.estado == 'PROGRAMADO' %}
-                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"><i class="bi bi-hourglass-split me-1"></i>Programado</span>
+                                <span class="status-pill warning"><span class="status-dot"></span>Programado</span>
                             {% elif m.estado == 'EN_PROCESO' %}
-                                <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle"><i class="bi bi-gear-fill me-1"></i>En taller</span>
+                                <span class="status-pill info"><span class="status-dot"></span>En taller</span>
                             {% elif m.estado == 'COMPLETADO' %}
-                                <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2 me-1"></i>Listo</span>
+                                <span class="status-pill success"><span class="status-dot"></span>Listo</span>
                             {% else %}
-                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="bi bi-x-circle me-1"></i>Cancelado</span>
+                                <span class="status-pill neutral"><span class="status-dot"></span>Cancelado</span>
                             {% endif %}
                         </div>
                         <div class="mono small fw-semibold text-dark mt-1">
                             {% if m.costo > 0 %}
                                 ${{ m.costo|floatformat:0 }} CLP
                             {% else %}
-                                <span class="text-muted fw-normal" style="font-size: 0.75rem;">Sin costo</span>
+                                <span class="text-muted fw-normal" style="font-size: 0.74rem;">Sin costo</span>
                             {% endif %}
                         </div>
                     </td>
@@ -91,14 +95,14 @@
                                     </button>
                                 </form>
                             {% else %}
-                                <span class="badge bg-light text-secondary border">Terminado</span>
+                                <span class="status-pill neutral">Terminado</span>
                             {% endif %}
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center text-secondary py-5 small">No hay órdenes de mantenimiento registradas.</td>
+                    <td colspan="5" class="text-center text-muted py-5 small">No hay órdenes de mantenimiento registradas en el sistema.</td>
                 </tr>
                 {% endfor %}
             </tbody>

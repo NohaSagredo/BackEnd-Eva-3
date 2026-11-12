@@ -3,126 +3,165 @@
 {% block title %}Panel Principal — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+<!-- HEADER PRINCIPAL CON ACCIÓN DESTACADA -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 gap-3 border-bottom pb-3">
     <div>
-        <h1 class="h3 fw-bold text-dark mb-1">Panel Principal</h1>
-        <p class="text-secondary small mb-0">Resumen en vivo de tus herramientas, préstamos activos y revisiones técnicas pendientes.</p>
+        <h1 class="page-heading">Panel de Control Operativo</h1>
+        <p class="page-caption">Monitoreo en tiempo real del parque de herramientas, control de faenas activas y trazabilidad de préstamos.</p>
     </div>
-    <div>
-        <a href="{% url 'nuevo_prestamo' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 py-2 fw-semibold shadow-sm">
+    <div class="d-flex align-items-center gap-2">
+        <a href="{% url 'herramientas_crear' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 py-2 px-3">
             <i class="bi bi-plus-lg"></i>
+            <span class="d-none d-sm-inline">Nueva Herramienta</span>
+        </a>
+        <a href="{% url 'nuevo_prestamo' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 py-2 px-4 shadow-sm" style="box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);">
+            <i class="bi bi-journal-arrow-up fs-6"></i>
             <span>Prestar Herramienta</span>
         </a>
     </div>
 </div>
 
-<!-- METRICAS KPI CON BOOTSTRAP GRID -->
+<!-- TARJETAS DE MÉTRICAS KPI JERÁRQUICAS -->
 <div class="row g-3 mb-4">
-    <div class="col-6 col-md-4 col-xl">
-        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
-            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Total Herramientas</div>
-            <div class="h3 fw-bold text-dark mb-1 mono">{{ total_activos }}</div>
-            <div class="text-secondary small" style="font-size: 0.75rem;">Herramientas registradas</div>
+    <div class="col-6 col-lg-4 col-xl">
+        <div class="metric-card metric-card-accent-primary">
+            <div>
+                <div class="metric-label">Parque Total</div>
+                <div class="metric-value mono">{{ total_activos }}</div>
+            </div>
+            <div class="metric-hint d-flex align-items-center gap-1">
+                <i class="bi bi-tools text-primary"></i> Herramientas inventariadas
+            </div>
         </div>
     </div>
-    <div class="col-6 col-md-4 col-xl">
-        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
-            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Disponibles</div>
-            <div class="h3 fw-bold text-success mb-1 mono">{{ disponibles }}</div>
-            <div class="text-secondary small" style="font-size: 0.75rem;">Listas para prestar</div>
+    <div class="col-6 col-lg-4 col-xl">
+        <div class="metric-card metric-card-accent-success">
+            <div>
+                <div class="metric-label">Disponibles</div>
+                <div class="metric-value text-success mono">{{ disponibles }}</div>
+            </div>
+            <div class="metric-hint d-flex align-items-center gap-1">
+                <i class="bi bi-check-circle text-success"></i> Listas en bodega
+            </div>
         </div>
     </div>
-    <div class="col-6 col-md-4 col-xl">
-        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
-            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">En Obras</div>
-            <div class="h3 fw-bold text-primary mb-1 mono">{{ en_uso }}</div>
-            <div class="text-secondary small" style="font-size: 0.75rem;">En uso en terreno</div>
+    <div class="col-6 col-lg-4 col-xl">
+        <div class="metric-card metric-card-accent-primary">
+            <div>
+                <div class="metric-label">En Faena</div>
+                <div class="metric-value text-primary mono">{{ en_uso }}</div>
+            </div>
+            <div class="metric-hint d-flex align-items-center gap-1">
+                <i class="bi bi-buildings text-primary"></i> Asignadas a obras
+            </div>
         </div>
     </div>
-    <div class="col-6 col-md-4 col-xl">
-        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
-            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">En Mantenimiento</div>
-            <div class="h3 fw-bold text-warning mb-1 mono">{{ mantenimiento }}</div>
-            <div class="text-secondary small" style="font-size: 0.75rem;">En revisión técnica</div>
+    <div class="col-6 col-lg-4 col-xl">
+        <div class="metric-card metric-card-accent-warning">
+            <div>
+                <div class="metric-label">En Mantenimiento</div>
+                <div class="metric-value text-warning mono">{{ mantenimiento }}</div>
+            </div>
+            <div class="metric-hint d-flex align-items-center gap-1">
+                <i class="bi bi-wrench-adjustable text-warning"></i> En taller técnico
+            </div>
         </div>
     </div>
-    <div class="col-12 col-md-4 col-xl">
-        <div class="card border-0 shadow-sm rounded-3 h-100 p-3 bg-white">
-            <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Con Atraso</div>
-            <div class="h3 fw-bold text-danger mb-1 mono">{{ contratistas_bloqueados }}</div>
-            <div class="text-secondary small" style="font-size: 0.75rem;">Contratistas con atraso</div>
+    <div class="col-12 col-lg-4 col-xl">
+        <div class="metric-card {% if contratistas_bloqueados > 0 %}metric-card-accent-danger bg-danger-subtle bg-opacity-25{% else %}metric-card-accent-success{% endif %}">
+            <div>
+                <div class="metric-label">Contratistas Atrasados</div>
+                <div class="metric-value {% if contratistas_bloqueados > 0 %}text-danger{% else %}text-success{% endif %} mono">{{ contratistas_bloqueados }}</div>
+            </div>
+            <div class="metric-hint d-flex align-items-center gap-1">
+                {% if contratistas_bloqueados > 0 %}
+                    <i class="bi bi-exclamation-octagon-fill text-danger"></i> Con préstamos vencidos
+                {% else %}
+                    <i class="bi bi-shield-check text-success"></i> Sin mora registrada
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
 
 {% if alertas_morosidad %}
-<!-- ALERTA DE ATRASOS -->
-<div class="alert alert-danger border-danger-subtle d-flex flex-wrap justify-content-between align-items-center shadow-sm rounded-3 p-3 mb-4" role="alert">
-    <div class="d-flex align-items-center gap-3">
-        <span class="badge bg-danger text-white px-2 py-1 fw-bold d-flex align-items-center gap-1">
-            <i class="bi bi-exclamation-triangle-fill"></i> ALERTA DE ATRASO
-        </span>
-        <div class="small text-danger-emphasis">
-            Hay <strong>{{ alertas_morosidad.count }}</strong> contratista(s) con devoluciones vencidas. No pueden pedir más herramientas hasta devolverlas.
+<!-- ALERTA CRÍTICA DE MOROSIDAD (JERARQUÍA VISUAL PRIORITARIA) -->
+<div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-danger text-white overflow-hidden position-relative" style="background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="p-2 bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-white"></i>
+            </div>
+            <div>
+                <div class="fw-bold fs-6">BLOQUEO ACTIVO: {{ alertas_morosidad.count }} Contratista(s) con préstamos vencidos</div>
+                <div class="small text-white text-opacity-75">Las empresas en mora tienen restringida la solicitud de nuevas herramientas hasta regularizar su devolución.</div>
+            </div>
         </div>
+        <a href="{% url 'prestamos' %}?estado=VENCIDO_MOROSO" class="btn btn-light btn-sm fw-bold px-3 py-2 text-danger shadow-sm">
+            Gestionar Atrasados &rarr;
+        </a>
     </div>
-    <a href="{% url 'prestamos' %}?estado=VENCIDO_MOROSO" class="btn btn-outline-danger btn-sm fw-semibold">
-        Ver Atrasados &rarr;
-    </a>
 </div>
 {% endif %}
 
+<!-- ESTRUCTURA PRINCIPAL EN 2 COLUMNAS ASIMÉTRICAS (7 / 5) -->
 <div class="row g-4 mb-4">
-    <!-- COLUMNA IZQUIERDA: ÚLTIMOS PRÉSTAMOS -->
+    <!-- COLUMNA PRINCIPAL (7 COLS): PRÉSTAMOS ACTIVOS -->
     <div class="col-12 col-xl-7">
-        <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white h-100">
-            <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
-                <span class="fw-bold text-dark d-flex align-items-center gap-2">
-                    <i class="bi bi-journal-text text-primary fs-5"></i>
-                    Últimos Préstamos
+        <div class="card-panel h-100 d-flex flex-column">
+            <div class="card-header-bar">
+                <span class="card-title">
+                    <i class="bi bi-journal-arrow-up text-primary fs-5"></i>
+                    Últimos Préstamos Despachados
                 </span>
-                <a href="{% url 'prestamos' %}" class="btn btn-outline-secondary btn-sm">Ver Todos &rarr;</a>
+                <a href="{% url 'prestamos' %}" class="btn btn-outline-secondary btn-sm py-1 px-3">Ver Todos &rarr;</a>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive flex-grow-1">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+                    <thead>
                         <tr>
-                            <th class="ps-4">N° Préstamo</th>
+                            <th class="ps-4">Código & Estado</th>
                             <th>Contratista y Obra</th>
-                            <th>Fecha Devolución</th>
-                            <th>Estado</th>
-                            <th class="pe-4">Firma</th>
+                            <th>Devolución</th>
+                            <th class="pe-4 text-end">Firma</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for p in ultimos_prestamos %}
                         <tr>
-                            <td class="ps-4 mono fw-bold text-primary small">{{ p.codigo_prestamo }}</td>
-                            <td>
-                                <div class="fw-semibold text-dark small">{{ p.contratista.razon_social }}</div>
-                                <div class="text-secondary small">{{ p.obra.nombre }}</div>
+                            <td class="ps-4">
+                                <div class="mono fw-bold text-primary small">{{ p.codigo_prestamo }}</div>
+                                <div class="mt-1">
+                                    {% if p.estado == 'ACTIVO' %}
+                                        <span class="status-pill info"><span class="status-dot"></span>En faena</span>
+                                    {% elif p.estado == 'VENCIDO_MOROSO' %}
+                                        <span class="status-pill danger"><span class="status-dot"></span>Atrasado</span>
+                                    {% else %}
+                                        <span class="status-pill neutral"><span class="status-dot"></span>Devuelto</span>
+                                    {% endif %}
+                                </div>
                             </td>
-                            <td class="mono small fw-semibold text-dark">{{ p.fecha_pactada_devolucion|date:"d/m/Y" }}</td>
                             <td>
-                                {% if p.estado == 'ACTIVO' %}
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-clock me-1"></i>En préstamo</span>
-                                {% elif p.estado == 'VENCIDO_MOROSO' %}
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="bi bi-exclamation-circle me-1"></i>Atrasado</span>
-                                {% else %}
-                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="bi bi-check2 me-1"></i>Devuelto</span>
-                                {% endif %}
+                                <div class="fw-bold text-dark small">{{ p.contratista.razon_social }}</div>
+                                <div class="text-secondary small d-flex align-items-center gap-1 mt-1" style="font-size: 0.76rem;">
+                                    <i class="bi bi-geo-alt text-muted"></i>{{ p.obra.nombre }}
+                                </div>
                             </td>
-                            <td class="pe-4">
+                            <td>
+                                <div class="mono small fw-bold text-dark">{{ p.fecha_pactada_devolucion|date:"d/m/Y" }}</div>
+                                <div class="text-muted small" style="font-size: 0.72rem;">Salida: {{ p.fecha_prestamo|date:"d/m/Y" }}</div>
+                            </td>
+                            <td class="pe-4 text-end">
                                 {% if p.firma_digital_entrega %}
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle" title="Firma registrada"><i class="bi bi-pen-fill me-1"></i>Firmado</span>
+                                    <span class="status-pill success" title="Firma digital verificada en acta"><span class="status-dot"></span>Firmado</span>
                                 {% else %}
-                                    <span class="badge bg-light text-secondary border">Sin firma</span>
+                                    <span class="status-pill neutral">Sin firma</span>
                                 {% endif %}
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="text-center text-secondary py-4 small">No hay préstamos recientes registrados.</td>
+                            <td colspan="4" class="text-center text-muted py-5 small">No se registran préstamos en el historial reciente.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -131,57 +170,23 @@
         </div>
     </div>
 
-    <!-- COLUMNA DERECHA: ALERTAS Y MANTENIMIENTO -->
+    <!-- COLUMNA SECUNDARIA (5 COLS): MANTENIMIENTOS & ACCESOS RÁPIDOS -->
     <div class="col-12 col-xl-5 d-flex flex-column gap-4">
-        {% if alertas_morosidad %}
-        <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white">
-            <div class="card-header bg-danger-subtle border-bottom border-danger-subtle py-3 px-4">
-                <span class="fw-bold text-danger d-flex align-items-center gap-2">
-                    <i class="bi bi-exclamation-octagon-fill"></i>
-                    Préstamos Atrasados
-                </span>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="ps-4">Contratista</th>
-                            <th>Atraso</th>
-                            <th class="pe-4 text-end">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for a in alertas_morosidad %}
-                        <tr>
-                            <td class="ps-4">
-                                <div class="fw-semibold text-dark small">{{ a.contratista.razon_social }}</div>
-                                <div class="mono text-secondary small">{{ a.prestamo.codigo_prestamo }}</div>
-                            </td>
-                            <td class="mono text-danger fw-bold small">+{{ a.dias_retraso }} días</td>
-                            <td class="pe-4 text-end">
-                                <a href="{% url 'devolucion_prestamo' a.prestamo.id %}" class="btn btn-primary btn-sm py-1 px-2 fw-semibold">Recibir</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        {% endif %}
-
-        <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white">
-            <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
-                <span class="fw-bold text-dark d-flex align-items-center gap-2">
+        <!-- WIDGET 1: MANTENIMIENTOS PENDIENTES -->
+        <div class="card-panel">
+            <div class="card-header-bar">
+                <span class="card-title">
                     <i class="bi bi-wrench-adjustable text-warning fs-5"></i>
-                    Mantenimientos y Revisiones
+                    Revisiones y Mantenimiento
                 </span>
-                <a href="{% url 'mantenimientos' %}" class="btn btn-outline-secondary btn-sm">Ver Todo &rarr;</a>
+                <a href="{% url 'mantenimientos' %}" class="btn btn-outline-secondary btn-sm py-1 px-2">Ver Todo &rarr;</a>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+                    <thead>
                         <tr>
-                            <th class="ps-4">Herramienta / Orden</th>
+                            <th class="ps-4">Herramienta</th>
+                            <th>Horas</th>
                             <th class="pe-4 text-end">Estado</th>
                         </tr>
                     </thead>
@@ -191,25 +196,66 @@
                             <td class="ps-4">
                                 <div class="mono fw-bold text-primary small">{{ m.codigo_orden }}</div>
                                 <div class="fw-semibold text-dark small">{{ m.herramienta.nombre }}</div>
-                                <div class="mono text-secondary small">Uso: {{ m.horas_al_momento }} hrs</div>
+                                <div class="text-muted small" style="font-size: 0.72rem;">Técnico: {{ m.tecnico_responsable }}</div>
+                            </td>
+                            <td class="mono small fw-semibold text-dark">
+                                {{ m.horas_al_momento }} hrs
                             </td>
                             <td class="pe-4 text-end">
                                 {% if m.estado == 'PROGRAMADO' %}
-                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"><i class="bi bi-hourglass-split me-1"></i>Programado</span>
+                                    <span class="status-pill warning"><span class="status-dot"></span>Programado</span>
                                 {% elif m.estado == 'EN_PROCESO' %}
-                                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle"><i class="bi bi-gear-fill me-1"></i>En taller</span>
+                                    <span class="status-pill info"><span class="status-dot"></span>En taller</span>
                                 {% else %}
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2 me-1"></i>Listo</span>
+                                    <span class="status-pill success"><span class="status-dot"></span>Listo</span>
                                 {% endif %}
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="2" class="text-center text-secondary py-4 small">No hay revisiones técnicas pendientes.</td>
+                            <td colspan="3" class="text-center text-muted py-4 small">No hay herramientas en taller actualmente.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- WIDGET 2: ACCESOS RÁPIDOS OPERATIVOS -->
+        <div class="card-panel p-4">
+            <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-lightning-charge-fill text-primary"></i>
+                Acciones Rápidas del Sistema
+            </h6>
+            <div class="d-grid gap-2">
+                <a href="{% url 'herramientas_crear' %}" class="btn btn-outline-secondary btn-sm text-start d-flex align-items-center justify-content-between p-2">
+                    <span class="d-flex align-items-center gap-2">
+                        <i class="bi bi-plus-circle text-primary"></i>
+                        <span>Ingresar nueva herramienta al catálogo</span>
+                    </span>
+                    <i class="bi bi-chevron-right text-muted small"></i>
+                </a>
+                <a href="{% url 'obras_crear' %}" class="btn btn-outline-secondary btn-sm text-start d-flex align-items-center justify-content-between p-2">
+                    <span class="d-flex align-items-center gap-2">
+                        <i class="bi bi-building-add text-primary"></i>
+                        <span>Dar de alta una nueva faena / obra</span>
+                    </span>
+                    <i class="bi bi-chevron-right text-muted small"></i>
+                </a>
+                <a href="{% url 'contratistas_crear' %}" class="btn btn-outline-secondary btn-sm text-start d-flex align-items-center justify-content-between p-2">
+                    <span class="d-flex align-items-center gap-2">
+                        <i class="bi bi-person-plus text-primary"></i>
+                        <span>Registrar nuevo contratista</span>
+                    </span>
+                    <i class="bi bi-chevron-right text-muted small"></i>
+                </a>
+                <a href="{% url 'exportar_auditoria_csv' %}" class="btn btn-outline-secondary btn-sm text-start d-flex align-items-center justify-content-between p-2">
+                    <span class="d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-lock text-primary"></i>
+                        <span>Descargar registro de auditoría ISO 27001 (CSV)</span>
+                    </span>
+                    <i class="bi bi-download text-muted small"></i>
+                </a>
             </div>
         </div>
     </div>

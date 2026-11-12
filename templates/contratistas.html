@@ -3,51 +3,51 @@
 {% block title %}Contratistas — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 gap-3 border-bottom pb-3">
     <div>
-        <h1 class="h3 fw-bold text-dark mb-1">Empresas Contratistas</h1>
-        <p class="text-secondary small mb-0">Gestión de empresas colaboradoras, representantes legales y estado de habilitación.</p>
+        <h1 class="page-heading">Empresas Contratistas</h1>
+        <p class="page-caption">Directorio de empresas colaboradoras, representantes legales y estado de habilitación para el retiro de herramientas.</p>
     </div>
     <div>
-        <a href="{% url 'contratistas_crear' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold shadow-sm">
+        <a href="{% url 'contratistas_crear' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 py-2 px-3 shadow-sm">
             <i class="bi bi-plus-lg"></i>
             <span>Nuevo Contratista</span>
         </a>
     </div>
 </div>
 
-<div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">
+<div class="card-panel mb-4">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+            <thead>
                 <tr>
-                    <th class="ps-4" style="min-width: 240px;">Contratista</th>
-                    <th>Representante y Contacto</th>
-                    <th>Estado</th>
+                    <th class="ps-4" style="min-width: 250px;">Empresa & RUT</th>
+                    <th>Representante Legal y Contacto</th>
+                    <th>Estado de Habilitación</th>
                     <th>Motivo de Bloqueo</th>
-                    <th class="pe-4 text-end" style="width: 230px;">Acciones</th>
+                    <th class="pe-4 text-end" style="width: 210px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for c in contratistas %}
                 <tr>
                     <td class="ps-4">
-                        <div class="fw-semibold text-dark small">{{ c.razon_social }}</div>
+                        <div class="fw-bold text-dark small">{{ c.razon_social }}</div>
                         <div class="mono fw-bold text-primary small mt-1">{{ c.rut }}</div>
                     </td>
                     <td>
                         <div class="fw-semibold text-dark small">{{ c.representante_legal }}</div>
-                        <div class="text-secondary small mt-1" style="font-size: 0.75rem;">
-                            <i class="bi bi-envelope me-1"></i>{{ c.email }} &bull; <span class="mono"><i class="bi bi-telephone ms-1 me-1"></i>{{ c.telefono }}</span>
+                        <div class="text-muted small mt-1 d-flex align-items-center gap-1" style="font-size: 0.74rem;">
+                            <i class="bi bi-envelope"></i>{{ c.email }} &bull; <span class="mono"><i class="bi bi-telephone ms-1 me-1"></i>{{ c.telefono }}</span>
                         </div>
                     </td>
                     <td>
                         {% if c.estado == 'HABILITADO' %}
-                            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle me-1"></i>Al día</span>
+                            <span class="status-pill success"><span class="status-dot"></span>Al día</span>
                         {% elif c.estado == 'BLOQUEADO_MOROSIDAD' %}
-                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="bi bi-exclamation-octagon me-1"></i>Bloqueado por atraso</span>
+                            <span class="status-pill danger"><span class="status-dot"></span>Bloqueado por mora</span>
                         {% else %}
-                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="bi bi-pause-circle me-1"></i>Suspendido</span>
+                            <span class="status-pill neutral"><span class="status-dot"></span>Suspendido</span>
                         {% endif %}
                     </td>
                     <td style="max-width: 260px;">
@@ -94,7 +94,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center text-secondary py-5 small">No hay contratistas registrados en el sistema.</td>
+                    <td colspan="5" class="text-center text-muted py-5 small">No hay contratistas registrados en el sistema.</td>
                 </tr>
                 {% endfor %}
             </tbody>

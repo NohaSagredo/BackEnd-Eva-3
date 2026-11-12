@@ -3,10 +3,10 @@
 {% block title %}Devolución de Herramientas — N° {{ prestamo.codigo_prestamo }}{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 gap-3 border-bottom pb-3">
     <div>
-        <h1 class="h3 fw-bold text-dark mb-1">Devolución de Herramientas</h1>
-        <p class="text-secondary small mb-0">Revisa el estado de las herramientas devueltas, actualiza las horas de uso y registra la firma digital.</p>
+        <h1 class="page-heading">Devolución de Herramientas</h1>
+        <p class="page-caption">Inspección técnica de retorno, actualización de horas finales de uso y acta de recepción con firma digital.</p>
     </div>
     <a href="{% url 'prestamos' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1">
         <i class="bi bi-arrow-left"></i>
@@ -18,28 +18,31 @@
     {% csrf_token %}
     <input type="hidden" name="firma_digital_recepcion" id="firmaRecepcionInput">
 
-    <!-- RESUMEN DEL PRÉSTAMO EN TARJETA BOOTSTRAP -->
-    <div class="card border-0 shadow-sm rounded-3 p-4 bg-white mb-4">
+    <!-- FICHA RESUMEN DEL PRÉSTAMO CON JERARQUÍA -->
+    <div class="card-panel p-4 mb-4">
         <div class="row g-3 align-items-center">
             <div class="col-6 col-md-3">
-                <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">N° Préstamo</div>
+                <div class="metric-label">Folio del Préstamo</div>
                 <div class="h5 fw-bold text-primary mb-0 mono">{{ prestamo.codigo_prestamo }}</div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Contratista</div>
-                <div class="fw-semibold text-dark small">{{ prestamo.contratista.razon_social }}</div>
-                <div class="mono text-muted small" style="font-size: 0.75rem;">{{ prestamo.contratista.rut }}</div>
+                <div class="metric-label">Contratista Responsable</div>
+                <div class="fw-bold text-dark small">{{ prestamo.contratista.razon_social }}</div>
+                <div class="mono text-muted small" style="font-size: 0.74rem;">{{ prestamo.contratista.rut }}</div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Obra</div>
-                <div class="fw-semibold text-dark small">{{ prestamo.obra.nombre }}</div>
+                <div class="metric-label">Faena de Origen</div>
+                <div class="fw-bold text-dark small">{{ prestamo.obra.nombre }}</div>
+                <div class="text-muted small" style="font-size: 0.74rem;">Supervisor: {{ prestamo.obra.supervisor_nombre }}</div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="text-uppercase small fw-bold text-secondary mb-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Fecha Pactada</div>
+                <div class="metric-label">Fecha Límite Pactada</div>
                 <div class="d-flex align-items-center gap-2">
                     <span class="mono fw-bold text-dark small">{{ prestamo.fecha_pactada_devolucion|date:"d/m/Y" }}</span>
                     {% if prestamo.estado == 'VENCIDO_MOROSO' %}
-                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Con atraso</span>
+                        <span class="status-pill danger"><span class="status-dot"></span>Con atraso</span>
+                    {% else %}
+                        <span class="status-pill success"><span class="status-dot"></span>En plazo</span>
                     {% endif %}
                 </div>
             </div>
@@ -47,23 +50,23 @@
     </div>
 
     <div class="row g-4">
-        <!-- COLUMNA IZQUIERDA: HERRAMIENTAS Y CONTROL DE HORAS -->
+        <!-- COLUMNA IZQUIERDA: HERRAMIENTAS Y CONTROL DE HORAS (7 COLS) -->
         <div class="col-12 col-xl-7">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white h-100">
-                <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
-                    <span class="fw-bold text-dark d-flex align-items-center gap-2">
+            <div class="card-panel overflow-hidden h-100">
+                <div class="card-header-bar">
+                    <span class="card-title">
                         <i class="bi bi-clock-history text-primary"></i>
-                        Herramientas y horas finales de uso *
+                        Herramientas y Horas Finales de Uso *
                     </span>
-                    <span class="text-secondary small">Actualiza las horas acumuladas</span>
+                    <span class="text-muted small">Registra el horómetro final</span>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+                        <thead>
                             <tr>
                                 <th class="ps-4">Herramienta</th>
                                 <th>Horas salida</th>
-                                <th style="width: 160px;">Horas retorno *</th>
+                                <th style="width: 170px;">Horas retorno *</th>
                                 <th class="pe-4">Observaciones</th>
                             </tr>
                         </thead>
@@ -72,16 +75,16 @@
                             <tr>
                                 <td class="ps-4">
                                     <div class="mono fw-bold text-primary small">{{ item.herramienta.codigo_inventario }}</div>
-                                    <div class="fw-semibold text-dark small">{{ item.herramienta.nombre }}</div>
-                                    <div class="mono text-muted small" style="font-size: 0.75rem;">{{ item.herramienta.categoria.nombre }} &bull; {{ item.herramienta.marca }}</div>
+                                    <div class="fw-bold text-dark small">{{ item.herramienta.nombre }}</div>
+                                    <div class="mono text-muted small" style="font-size: 0.74rem;">{{ item.herramienta.categoria.nombre }} &bull; {{ item.herramienta.marca }}</div>
                                 </td>
                                 <td class="mono fw-semibold text-dark small">{{ item.horas_uso_iniciales }} hrs</td>
                                 <td>
                                     <div class="input-group input-group-sm">
                                         <input type="number" name="horas_final_{{ item.id }}" class="form-control mono fw-bold" value="{{ item.herramienta.horas_uso_acumuladas }}" min="{{ item.horas_uso_iniciales }}" required>
-                                        <span class="input-group-text small text-secondary">hrs</span>
+                                        <span class="input-group-text small text-muted">hrs</span>
                                     </div>
-                                    <div class="text-secondary small mt-1" style="font-size: 0.72rem;">Límite Mto: {{ item.herramienta.horas_proximo_mantenimiento }} hrs</div>
+                                    <div class="text-muted small mt-1" style="font-size: 0.72rem;">Límite Mto: {{ item.herramienta.horas_proximo_mantenimiento }} hrs</div>
                                 </td>
                                 <td class="pe-4">
                                     <input type="text" name="obs_item_{{ item.id }}" class="form-control form-control-sm" placeholder="Buen estado, limpio...">
@@ -94,9 +97,9 @@
             </div>
         </div>
 
-        <!-- COLUMNA DERECHA: RESPONSABLES Y FIRMA DE RECEPCIÓN -->
+        <!-- COLUMNA DERECHA: RESPONSABLE Y FIRMA DE RECEPCIÓN (5 COLS) -->
         <div class="col-12 col-xl-5">
-            <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100 d-flex flex-column justify-content-between">
+            <div class="card-panel p-4 h-100 d-flex flex-column justify-content-between">
                 <div>
                     <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
                         <i class="bi bi-pen-fill text-primary"></i>
@@ -105,25 +108,25 @@
 
                     <div class="row g-3 mb-4">
                         <div class="col-12">
-                            <label class="form-label small fw-semibold text-secondary" for="entregadoNombre">Nombre de quién devuelve *</label>
+                            <label class="form-label" for="entregadoNombre">Nombre de quién devuelve las herramientas *</label>
                             <input type="text" name="entregado_por_nombre" id="entregadoNombre" class="form-control" value="{{ prestamo.receptor_nombre }}" required>
                         </div>
                         <div class="col-12">
-                            <label class="form-label small fw-semibold text-secondary">Receptor en Bodega</label>
+                            <label class="form-label">Bodeguero Receptor Conforme</label>
                             <input type="text" class="form-control bg-light" value="{{ request.user.username }}" disabled>
                         </div>
                     </div>
 
-                    <!-- RECUADRO DE FIRMA DIGITAL EN PANTALLA -->
-                    <div class="border rounded-3 p-3 bg-light text-center">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label class="form-label small fw-semibold text-secondary mb-0">Firma de recepción conforme:</label>
-                            <button type="button" onclick="limpiarFirma()" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size: 0.78rem;">
+                    <!-- CAJA DE FIRMA DIGITAL -->
+                    <div class="signature-container">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <label class="form-label mb-0">Firma de recepción conforme:</label>
+                            <button type="button" onclick="limpiarFirma()" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size: 0.76rem;">
                                 <i class="bi bi-eraser"></i> Limpiar firma
                             </button>
                         </div>
-                        <canvas id="signatureCanvas" width="480" height="150" class="w-100 border rounded-2 bg-white" style="max-width: 480px; height: 150px;"></canvas>
-                        <div id="firmaStatus" class="small text-secondary mt-2 fw-medium" style="font-size: 0.78rem;">
+                        <canvas id="signatureCanvas" width="480" height="150" class="w-100"></canvas>
+                        <div id="firmaStatus" class="small text-muted fw-semibold" style="font-size: 0.78rem;">
                             Esperando firma en el recuadro...
                         </div>
                     </div>
@@ -131,7 +134,7 @@
 
                 <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
                     <a href="{% url 'prestamos' %}" class="btn btn-outline-secondary">Cancelar</a>
-                    <button type="submit" id="btnDevolver" class="btn btn-success d-inline-flex align-items-center gap-2 px-4 py-2 fw-semibold">
+                    <button type="submit" id="btnDevolver" class="btn btn-success d-inline-flex align-items-center gap-2 px-4 py-2 shadow-sm">
                         <i class="bi bi-check2-circle fs-5"></i>
                         <span>Confirmar Devolución</span>
                     </button>
@@ -180,8 +183,8 @@
         ctx.lineTo(pos.x, pos.y);
         ctx.stroke();
         tieneTrazo = true;
-        statusText.innerText = "✓ Firma de recepción registrada";
-        statusText.className = "small text-success mt-2 fw-semibold";
+        statusText.innerText = "✓ Firma de recepción registrada correctamente";
+        statusText.className = "small text-success fw-bold";
     }
 
     function terminar() {
@@ -207,7 +210,7 @@
         tieneTrazo = false;
         firmaInput.value = "";
         statusText.innerText = "Esperando firma en el recuadro...";
-        statusText.className = "small text-secondary mt-2 fw-medium";
+        statusText.className = "small text-muted fw-semibold";
     }
 
     document.getElementById('devolucionForm').addEventListener('submit', function(e) {

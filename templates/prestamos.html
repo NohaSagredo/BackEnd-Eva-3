@@ -3,68 +3,67 @@
 {% block title %}Préstamos — BuildCorp{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+<!-- HEADER CON JERARQUÍA -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 gap-3 border-bottom pb-3">
     <div>
-        <h1 class="h3 fw-bold text-dark mb-1">Préstamos de Herramientas</h1>
-        <p class="text-secondary small mb-0">Control de entregas, plazos de devolución y comprobantes con firma digital.</p>
+        <h1 class="page-heading">Gestión de Préstamos y Despachos</h1>
+        <p class="page-caption">Seguimiento de actas de entrega, vencimientos de préstamos y comprobantes con firma digital de recepción.</p>
     </div>
-    <div class="d-flex gap-2">
-        <a href="{% url 'exportar_prestamos_csv' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 fw-medium shadow-sm">
+    <div class="d-flex align-items-center gap-2">
+        <a href="{% url 'exportar_prestamos_csv' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 py-2 px-3">
             <i class="bi bi-file-earmark-excel"></i>
-            <span>Descargar Excel</span>
+            <span>Exportar Excel</span>
         </a>
-        <a href="{% url 'nuevo_prestamo' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold shadow-sm">
-            <i class="bi bi-plus-lg"></i>
+        <a href="{% url 'nuevo_prestamo' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 py-2 px-4 shadow-sm" style="box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
+            <i class="bi bi-journal-plus fs-6"></i>
             <span>Nuevo Préstamo</span>
         </a>
     </div>
 </div>
 
-<!-- BARRA DE FILTROS Y BÚSQUEDA -->
-<div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-        <div class="d-flex flex-wrap gap-1">
-            <a href="{% url 'prestamos' %}" class="btn btn-sm {% if not estado_filtro %}btn-primary{% else %}btn-outline-secondary border-0 bg-light{% endif %} fw-semibold">
-                Todos
-            </a>
-            <a href="{% url 'prestamos' %}?estado=ACTIVO" class="btn btn-sm {% if estado_filtro == 'ACTIVO' %}btn-primary{% else %}btn-outline-secondary border-0 bg-light{% endif %} fw-medium">
-                En Préstamo
-            </a>
-            <a href="{% url 'prestamos' %}?estado=VENCIDO_MOROSO" class="btn btn-sm {% if estado_filtro == 'VENCIDO_MOROSO' %}btn-primary{% else %}btn-outline-secondary border-0 bg-light{% endif %} fw-medium">
-                Atrasados
-            </a>
-            <a href="{% url 'prestamos' %}?estado=DEVUELTO" class="btn btn-sm {% if estado_filtro == 'DEVUELTO' %}btn-primary{% else %}btn-outline-secondary border-0 bg-light{% endif %} fw-medium">
-                Devueltos
-            </a>
-        </div>
-
-        <form method="GET" action="{% url 'prestamos' %}" class="d-flex gap-2 align-items-center">
-            {% if estado_filtro %}<input type="hidden" name="estado" value="{{ estado_filtro }}">{% endif %}
-            <div class="input-group input-group-sm">
-                <input type="text" name="q" value="{{ query }}" placeholder="Buscar por código, contratista u obra..." class="form-control" style="min-width: 260px;">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-            {% if query %}
-                <a href="{% url 'prestamos' %}{% if estado_filtro %}?estado={{ estado_filtro }}{% endif %}" class="btn btn-outline-secondary btn-sm" title="Limpiar búsqueda">
-                    <i class="bi bi-x-lg"></i>
-                </a>
-            {% endif %}
-        </form>
+<!-- BARRA DE FILTROS SEGMENTADA -->
+<div class="filter-toolbar mb-4">
+    <div class="filter-group">
+        <a href="{% url 'prestamos' %}" class="filter-pill {% if not estado_filtro %}active{% endif %}">
+            Todos
+        </a>
+        <a href="{% url 'prestamos' %}?estado=ACTIVO" class="filter-pill {% if estado_filtro == 'ACTIVO' %}active{% endif %}">
+            En Faena
+        </a>
+        <a href="{% url 'prestamos' %}?estado=VENCIDO_MOROSO" class="filter-pill {% if estado_filtro == 'VENCIDO_MOROSO' %}active{% endif %}">
+            Con Atraso
+        </a>
+        <a href="{% url 'prestamos' %}?estado=DEVUELTO" class="filter-pill {% if estado_filtro == 'DEVUELTO' %}active{% endif %}">
+            Devueltos
+        </a>
     </div>
+
+    <form method="GET" action="{% url 'prestamos' %}" class="d-flex gap-2 align-items-center">
+        {% if estado_filtro %}<input type="hidden" name="estado" value="{{ estado_filtro }}">{% endif %}
+        <div class="input-group input-group-sm">
+            <input type="text" name="q" value="{{ query }}" placeholder="Buscar por código, contratista u obra..." class="form-control" style="min-width: 260px;">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+        {% if query %}
+            <a href="{% url 'prestamos' %}{% if estado_filtro %}?estado={{ estado_filtro }}{% endif %}" class="btn btn-outline-secondary btn-sm" title="Limpiar búsqueda">
+                <i class="bi bi-x-lg"></i>
+            </a>
+        {% endif %}
+    </form>
 </div>
 
 <!-- TABLA DE PRÉSTAMOS -->
-<div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">
+<div class="card-panel mb-4">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+            <thead>
                 <tr>
-                    <th class="ps-4" style="width: 170px;">N° Préstamo & Estado</th>
+                    <th class="ps-4" style="width: 170px;">Folio & Estado</th>
                     <th>Contratista y Obra</th>
                     <th>Herramientas prestadas</th>
-                    <th>Fechas de entrega</th>
+                    <th>Fechas del Préstamo</th>
                     <th>Firma</th>
                     <th class="pe-4 text-end" style="width: 190px;">Acciones</th>
                 </tr>
@@ -76,20 +75,22 @@
                         <div class="mono fw-bold text-primary small">{{ p.codigo_prestamo }}</div>
                         <div class="mt-1">
                             {% if p.estado == 'ACTIVO' %}
-                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-clock me-1"></i>En préstamo</span>
+                                <span class="status-pill info"><span class="status-dot"></span>En faena</span>
                             {% elif p.estado == 'VENCIDO_MOROSO' %}
-                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="bi bi-exclamation-circle me-1"></i>Atrasado</span>
+                                <span class="status-pill danger"><span class="status-dot"></span>Atrasado</span>
                             {% else %}
-                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="bi bi-check2 me-1"></i>Devuelto</span>
+                                <span class="status-pill neutral"><span class="status-dot"></span>Devuelto</span>
                             {% endif %}
                         </div>
                     </td>
                     <td>
-                        <div class="fw-semibold text-dark small">{{ p.contratista.razon_social }}</div>
+                        <div class="fw-bold text-dark small">{{ p.contratista.razon_social }}</div>
                         <div class="d-flex align-items-center gap-2 mt-1">
-                            <span class="mono text-muted small" style="font-size: 0.75rem;">{{ p.contratista.rut }}</span>
+                            <span class="mono text-muted small" style="font-size: 0.74rem;">{{ p.contratista.rut }}</span>
                             <span class="text-secondary small">&bull;</span>
-                            <span class="text-secondary small fw-medium">{{ p.obra.nombre }}</span>
+                            <span class="text-secondary small fw-medium d-flex align-items-center gap-1">
+                                <i class="bi bi-buildings text-muted"></i>{{ p.obra.nombre }}
+                            </span>
                         </div>
                     </td>
                     <td>
@@ -101,8 +102,8 @@
                     </td>
                     <td>
                         <div class="mono small">
-                            <div class="text-secondary">Prestado: {{ p.fecha_prestamo|date:"d/m/Y" }}</div>
-                            <div class="fw-bold text-dark mt-1">Devolver antes: {{ p.fecha_pactada_devolucion|date:"d/m/Y" }}</div>
+                            <div class="text-muted" style="font-size: 0.74rem;">Salida: {{ p.fecha_prestamo|date:"d/m/Y" }}</div>
+                            <div class="fw-bold text-dark mt-1">Devolver antes de: {{ p.fecha_pactada_devolucion|date:"d/m/Y" }}</div>
                         </div>
                     </td>
                     <td>
@@ -112,28 +113,28 @@
                                 <span>Ver firma</span>
                             </button>
                         {% else %}
-                            <span class="badge bg-light text-secondary border">Sin firma</span>
+                            <span class="status-pill neutral">Sin firma</span>
                         {% endif %}
                     </td>
                     <td class="pe-4 text-end">
                         <div class="d-inline-flex gap-1 align-items-center justify-content-end">
-                            <a href="{% url 'imprimir_prestamo' p.id %}" target="_blank" class="btn btn-outline-secondary btn-sm py-1 px-2 d-inline-flex align-items-center gap-1" title="Imprimir Comprobante">
+                            <a href="{% url 'imprimir_prestamo' p.id %}" target="_blank" class="btn btn-outline-secondary btn-sm py-1 px-2 d-inline-flex align-items-center gap-1" title="Imprimir Acta de Despacho">
                                 <i class="bi bi-printer"></i>
-                                <span class="d-none d-md-inline">Comprobante</span>
+                                <span class="d-none d-md-inline">Acta</span>
                             </a>
                             {% if p.estado != 'DEVUELTO' %}
-                                <a href="{% url 'devolucion_prestamo' p.id %}" class="btn btn-primary btn-sm py-1 px-2 fw-semibold">
+                                <a href="{% url 'devolucion_prestamo' p.id %}" class="btn btn-primary btn-sm py-1 px-3 fw-semibold">
                                     Devolver
                                 </a>
                             {% else %}
-                                <span class="badge bg-light text-secondary border">Finalizado</span>
+                                <span class="status-pill neutral">Finalizado</span>
                             {% endif %}
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center text-secondary py-5 small">No se encontraron préstamos registrados.</td>
+                    <td colspan="6" class="text-center text-muted py-5 small">No se encontraron préstamos registrados en el sistema.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -144,18 +145,18 @@
 <!-- MODAL BOOTSTRAP PARA VER FIRMA DIGITAL -->
 <div class="modal fade" id="firmaModal" tabindex="-1" aria-labelledby="firmaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header border-bottom">
-                <h6 class="modal-title fw-bold text-dark" id="firmaModalLabel">Firma Registrada</h6>
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-bottom py-3 px-4 bg-light">
+                <h6 class="modal-title fw-bold text-dark mb-0" id="firmaModalLabel">Firma Registrada</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            <div class="modal-body text-center p-4">
-                <p class="small text-secondary mb-3" id="modalReceptor"></p>
+            <div class="modal-body text-center p-4 bg-white">
+                <p class="small text-muted mb-3" id="modalReceptor"></p>
                 <div class="bg-light rounded-3 p-3 border mb-3 d-flex align-items-center justify-content-center" style="min-height: 200px;">
                     <img id="modalFirmaImg" src="" alt="Firma Registrada" class="img-fluid" style="max-height: 220px; object-fit: contain;">
                 </div>
             </div>
-            <div class="modal-footer border-top py-2">
+            <div class="modal-footer border-top py-2 px-4 bg-light">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
