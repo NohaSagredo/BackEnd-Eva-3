@@ -6,9 +6,9 @@
 - **Estudiante:** Rodrigo Nicolás Peña Sagredo  
 - **Proyecto:** BuildCorp (Sistema de Gestión de Herramientas, Préstamos con Firma en Pantalla y Control de Atrasos)  
 - **Repositorio en GitHub:** [https://github.com/NohaSagredo/BackEnd-Eva-3](https://github.com/NohaSagredo/BackEnd-Eva-3)  
-- **Servidor en Producción (AWS EC2):** [http://13.222.134.210/](http://13.222.134.210/)  
-- **Documentación Swagger API:** [http://13.222.134.210/api/docs/](http://13.222.134.210/api/docs/)  
-- **Panel Django Admin:** [http://13.222.134.210/admin/](http://13.222.134.210/admin/)  
+- **Servidor en Producción (AWS EC2):** [http://100.54.248.204/](http://100.54.248.204/)  
+- **Documentación Swagger API:** [http://100.54.248.204/api/docs/](http://100.54.248.204/api/docs/)  
+- **Panel Django Admin:** [http://100.54.248.204/admin/](http://100.54.248.204/admin/)  
 
 ---
 
@@ -101,8 +101,8 @@ Abre tu navegador en: [http://127.0.0.1:8000](http://127.0.0.1:8000) e inicia se
 
 La aplicación web y su base de datos relacional PostgreSQL se encuentran completamente operativas y disponibles en la nube de Amazon Web Services (AWS EC2):
 
-- **Dirección Web Pública:** [http://13.222.134.210/](http://13.222.134.210/)
-- **Documentación Swagger API:** [http://13.222.134.210/api/docs/](http://13.222.134.210/api/docs/)
-- **Panel Django Admin:** [http://13.222.134.210/admin/](http://13.222.134.210/admin/)
+- **Dirección Web Pública:** [http://100.54.248.204/](http://100.54.248.204/)
+- **Documentación Swagger API:** [http://100.54.248.204/api/docs/](http://100.54.248.204/api/docs/)
+- **Panel Django Admin:** [http://100.54.248.204/admin/](http://100.54.248.204/admin/)
 - **Motor de Base de Datos:** PostgreSQL nativo en la instancia EC2.
 - **Servidor Web:** Nginx en puerto 80 con Proxy Reverso y Gunicorn bajo servicio continuo Systemd.
